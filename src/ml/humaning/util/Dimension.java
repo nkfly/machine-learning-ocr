@@ -20,6 +20,10 @@ public class Dimension implements Comparable{
 	public int getDimension(){
 		return dimension;
 	}
+	public double getValue(){
+		return value;
+		
+	}
 	
 	
 
