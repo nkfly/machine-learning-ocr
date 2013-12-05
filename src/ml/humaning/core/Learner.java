@@ -5,7 +5,7 @@ package ml.humaning.core;
 public class Learner {
 	public static void main(String [] argv){
 		
-		if(argv.length < 4){
+		if(argv.length < 1){
 			printUsage();
 			System.exit(-1);
 			
@@ -13,9 +13,12 @@ public class Learner {
 		
 		
 		if("-knn".equals(argv[0])){
+			if(argv.length < 4){
+				System.exit(-1);
+			}
 			try {
 				KNN knn = new KNN(argv[1]);
-				System.out.println(knn.getValidationError(6, 10, 1));
+				System.out.println(knn.getValidationError(3, 10, 1));
 
 				
 				
@@ -35,7 +38,7 @@ public class Learner {
 	}
 	
 	public static void printUsage(){
-		System.out.println("Usage: java Learner [-MODEL] [INPUT_TRAIN_FILE] [INPUT_TEST_FILE]  [OUTPUT_CLASSIFIED_FILE] ");
+		System.out.println("Usage: java Learner [-MODEL] ... ");
 		
 	}
 

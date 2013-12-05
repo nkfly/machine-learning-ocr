@@ -26,6 +26,7 @@ public class KNN {
 		allData = new Point[tempVector.size()];
 		allData = tempVector.toArray(allData);
 		
+		reader.close();
 		
 	}
 	
@@ -78,22 +79,16 @@ public class KNN {
 			for(int i = 0;i < allData.length;i++){
 				if(!validationPoints.contains(i)){// it's a train point
 					trainData[trainIndex] = allData[i];
-					trainData[trainIndex].setDistanceToReference(allData[validationPointIndex].distance(allData[i]) );
+					//trainData[trainIndex].setDistanceToReference(allData[validationPointIndex].distance(allData[i]) );
+					//trainData[trainIndex].setDistanceToReference(-1*allData[validationPointIndex].innerProduct(allData[i]) );
+					trainData[trainIndex].setDistanceToReference(-1*allData[validationPointIndex].cosineSimilarity(allData[i]) );
 					trainIndex++;
 				}
-				
 			}
 			Arrays.sort(trainData);
-			if(classify(trainData, k) != allData[validationPointIndex].getZodiac())error++;
-			
-			
+			if(classify(trainData, k) != allData[validationPointIndex].getZodiac())error++;			
 		}
-		
-
-		
 		return error/numberOfValidationPoints;
-		
-		
 	}
 	
 	
