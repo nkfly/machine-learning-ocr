@@ -28,7 +28,54 @@ public class Point implements Comparable <Point>{
 		
 		
 	}
-
+	/*
+	 * get the empty region
+	 *  --------------------
+	 *  |        |         |
+	 *  |   1    |    2    |
+	 *  |        |         |
+	 *  --------------------
+	 *  |        |         |
+	 *  |   3    |    4    |
+	 *  |        |         |
+	 *  --------------------
+	 */
+	public int getEmptyRegion(){
+		
+		int[] region = new int[4];
+		
+		for (int x= 0; x< dimensionArray.length;x++){
+			
+			int pixel = dimensionArray[x].getDimension();
+			int row = (pixel-1) / 105;
+			int col = (pixel-1) % 105;
+			
+			if(row<105/2){ //UP
+				if(col<105/2){
+					region[0] +=1;
+				}else{
+					region[1] +=1;
+				}
+			}else{   //Down
+				if(col<105/2){
+					region[2] +=1;
+				}else{
+					region[3] +=1;
+				}
+			}
+		}
+		int mini=region[0];
+		int idx =0;
+		for(int x=1; x< region.length;x++){
+			if(mini>region[x]) {
+				mini=region[x];
+				idx = x;
+		    }
+		}
+		return idx ;
+		
+	}
+	
 	public int getZodiac() {
 		return zodiac;
 	}
