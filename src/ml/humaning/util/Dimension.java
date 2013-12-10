@@ -6,8 +6,8 @@ public class Dimension implements Comparable<Dimension>{
 	public Dimension(int d, double v){
 		dimension = d;
 		value = v;
-		
-		
+
+
 	}
 	@Override
 	public int compareTo(Dimension d) {
@@ -15,16 +15,16 @@ public class Dimension implements Comparable<Dimension>{
 		else if(this.dimension > d.getDimension())return 1;
 		return 0;
 	}
-	
+
 	public int getDimension(){
 		return dimension;
 	}
 	public double getValue(){
 		return value;
-		
+
 	}
-	
-	
-	
+
+
+
 
 }
