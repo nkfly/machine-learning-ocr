@@ -14,8 +14,8 @@ import ml.humaning.util.Point;
 
 public class KNN {
 	private Point [] allData;
-	public KNN(String inputFile) throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+	public KNN(String trainFile) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(trainFile));
 		String line;
 
 		Vector <Point> tempVector = new Vector<Point>();
@@ -61,9 +61,22 @@ public class KNN {
 		return maxZodiac;
 
 	}
-
+	
+	public double getCVError(int k, int numberOfFold){
+		if(numberOfFold < 2)return 0.0;
+		double crossValidationError = 0.0;
+		for(int i = 1;i <= numberOfFold;i++){
+			crossValidationError += getValidationError(k, numberOfFold, i);
+		}
+		return crossValidationError/numberOfFold;
+	}
+	
+	public void predict(int k, String testFile, String outputFile){
+		
+		
+	}
 	// fold is 1-based, [1, numberOfFold]
-	public double getValidationError(int k, int numberOfFold, int fold){
+	private double getValidationError(int k, int numberOfFold, int fold){
 		if(numberOfFold == 0)return 0.0;
 
 		int interval = allData.length/numberOfFold;
