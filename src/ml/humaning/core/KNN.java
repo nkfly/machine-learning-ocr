@@ -9,11 +9,12 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Vector;
 
-
 import ml.humaning.util.Point;
 
 public class KNN {
+
 	private Point [] allData;
+
 	public KNN(String trainFile) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(trainFile));
 		String line;
@@ -27,19 +28,21 @@ public class KNN {
 		allData = tempVector.toArray(allData);
 
 		reader.close();
-
 	}
 
-	private HashSet <Integer> getValidationPoints(int numberOfValidationPoints){
+	private HashSet <Integer> getValidationPoints(int numberOfValidationPoints) {
 		HashSet<Integer> validationPoints = new HashSet<Integer>();
 		Random generator = new Random(System.currentTimeMillis());
-		while(validationPoints.size() < numberOfValidationPoints)validationPoints.add(generator.nextInt(allData.length));
-		return validationPoints;
 
+		while (validationPoints.size() < numberOfValidationPoints)
+			validationPoints.add(generator.nextInt(allData.length));
+
+		return validationPoints;
 	}
 
-	private int classify(Point [] trainData, int k){
+	private int classify(Point [] trainData, int k) {
 		HashMap <Integer, Integer> zodiacToFrequency = new HashMap <Integer, Integer>();
+
 		for(int i = 0;i < trainData.length && i < k;i++){
 			if(zodiacToFrequency.get(trainData[i].getZodiac() ) == null){
 				zodiacToFrequency.put(trainData[i].getZodiac(), 1);
@@ -50,6 +53,7 @@ public class KNN {
 
 		int maxFrequency = 0;
 		int maxZodiac = 0;
+
 		for(Integer zodiac : zodiacToFrequency.keySet()){
 			if(zodiacToFrequency.get(zodiac) > maxFrequency){
 				maxFrequency = zodiacToFrequency.get(zodiac);
@@ -59,9 +63,8 @@ public class KNN {
 		}
 
 		return maxZodiac;
-
 	}
-	
+
 	public double getCVError(int k, int numberOfFold){
 		if(numberOfFold < 2)return 0.0;
 		double crossValidationError = 0.0;
@@ -70,10 +73,10 @@ public class KNN {
 		}
 		return crossValidationError/numberOfFold;
 	}
-	
+
 	public void predict(int k, String testFile, String outputFile){
-		
-		
+
+
 	}
 	// fold is 1-based, [1, numberOfFold]
 	private double getValidationError(int k, int numberOfFold, int fold){
@@ -87,28 +90,23 @@ public class KNN {
 		Point [] trainData = new Point[allData.length - numberOfValidationPoints];
 		double error = 0.0;
 
-		for(Integer validationPointIndex : validationPoints){
+		for (Integer validationPointIndex : validationPoints) {
 			int trainIndex = 0;
-			for(int i = 0;i < allData.length;i++){
-				if(!validationPoints.contains(i)){// it's a train point
+
+			for (int i = 0;i < allData.length;i++){
+
+				if (!validationPoints.contains(i)) {// it's a train point
 					trainData[trainIndex] = allData[i];
 					//trainData[trainIndex].setDistanceToReference(allData[validationPointIndex].distance(allData[i]) );
 					//trainData[trainIndex].setDistanceToReference(-1*allData[validationPointIndex].innerProduct(allData[i]) );
-					trainData[trainIndex].setDistanceToReference(-1*allData[validationPointIndex].cosineSimilarity(allData[i]) );
+					trainData[trainIndex].setDistanceToReference(-1*allData[validationPointIndex].cosineSimilarity(allData[i]));
 					trainIndex++;
 				}
 			}
 			Arrays.sort(trainData);
-			if(classify(trainData, k) != allData[validationPointIndex].getZodiac())error++;
+			if (classify(trainData, k) != allData[validationPointIndex].getZodiac())
+				error++;
 		}
 		return error/numberOfValidationPoints;
 	}
-
-
-
-
-
-
-
-
 }
