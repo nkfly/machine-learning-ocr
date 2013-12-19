@@ -8,7 +8,7 @@ public class Point implements Comparable <Point>{
 	private int zodiac;
 	private Dimension [] dimensionArray;
 	private double distanceToReference = 0.0;
-	private int blendingRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area 
+	private int maskRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area 
 
 	public Point(String record){
 		String [] tokens = record.split("\\s+");
@@ -27,8 +27,8 @@ public class Point implements Comparable <Point>{
 
 	}
 	
-	public void setBlendingRegion(int r){
-		blendingRegion = r;		
+	public void setMaskRegion(int r){
+		maskRegion = r;		
 	}
 	/*
 	 * get the empty region
@@ -120,7 +120,7 @@ public class Point implements Comparable <Point>{
 			} else if (this.dimensionArray[i].getDimension() > p.dimensionArray[j].getDimension()) {
 				j++;
 			} else {
-				if(getRegion(this.dimensionArray[i].getDimension()) != blendingRegion)product += (this.dimensionArray[i].getValue()*p.dimensionArray[j].getValue());
+				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)product += (this.dimensionArray[i].getValue()*p.dimensionArray[j].getValue());
 				
 				i++;
 				j++;
@@ -133,7 +133,7 @@ public class Point implements Comparable <Point>{
 	public double length(){
 		double square = 0.0;
 		for(Dimension d : dimensionArray){
-			if(getRegion(d.getDimension()) != blendingRegion)square += d.getValue() * d.getValue();
+			if(getRegion(d.getDimension()) != maskRegion)square += d.getValue() * d.getValue();
 		}
 		return Math.sqrt(square);
 	}
@@ -152,13 +152,13 @@ public class Point implements Comparable <Point>{
 
 		while (i < this.dimensionArray.length && j < p.dimensionArray.length) {
 			if (this.dimensionArray[i].getDimension() < p.dimensionArray[j].getDimension() ) {
-				if(getRegion(this.dimensionArray[i].getDimension()) != blendingRegion)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
+				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
 				i++;
 			} else if (this.dimensionArray[i].getDimension() > p.dimensionArray[j].getDimension()) {
-				if(getRegion(p.dimensionArray[j].getDimension()) != blendingRegion)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
+				if(getRegion(p.dimensionArray[j].getDimension()) != maskRegion)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
 				j++;
 			} else {
-				if(getRegion(this.dimensionArray[i].getDimension()) != blendingRegion)distance += (this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue())*
+				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)distance += (this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue())*
 						(this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue());
 				i++;
 				j++;
@@ -166,12 +166,12 @@ public class Point implements Comparable <Point>{
 		}
 
 		while (i < this.dimensionArray.length) {
-			if(getRegion(this.dimensionArray[i].getDimension()) != blendingRegion)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
+			if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
 			i++;
 		}
 
 		while (j < p.dimensionArray.length) {
-			if(getRegion(p.dimensionArray[j].getDimension()) != blendingRegion)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
+			if(getRegion(p.dimensionArray[j].getDimension()) != maskRegion)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
 			j++;
 		}
 
