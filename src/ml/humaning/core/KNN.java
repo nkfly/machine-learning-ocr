@@ -69,6 +69,7 @@ public class KNN {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 		for(Point testP : testData){
 			int emptyRegion = testP.getEmptyRegion();
+			testP.setBlendingRegion(emptyRegion);
 			for(int trainIndex = 0; trainIndex < allData.length;trainIndex++){
 				allData[trainIndex].setBlendingRegion(emptyRegion);
 				allData[trainIndex].setDistanceToReference(-1*testP.cosineSimilarity(allData[trainIndex]));
