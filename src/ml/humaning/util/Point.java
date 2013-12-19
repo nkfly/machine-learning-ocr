@@ -77,7 +77,7 @@ public class Point implements Comparable <Point>{
 		int idx  = 0;
 
 		for(int x = 1; x < region.length; x++){
-			if( mini < region[x] ) {
+			if( mini > region[x] ) {
 				mini = region[x];
 				idx  = x;
 		    }
