@@ -23,27 +23,27 @@ public class Learner {
 				String testFilePath = argv[2];
 				String outputFilePath = argv[3];
 
-				int optimalK = 0;
-				double optimalCrossValidationError = Double.MAX_VALUE;
+//				int optimalK = 0;
+//				double optimalCrossValidationError = Double.MAX_VALUE;
+//
+//				BufferedWriter writer = new BufferedWriter(new FileWriter("knn_validation"));
+//				writer.write("k\tcrossValidationError\n");
+//
+//				for(int i = 1;i <= 100;i++){
+//					double crossValidationError = knn.getCVError(i, 10);
+//
+//					if(crossValidationError < optimalCrossValidationError){
+//						optimalCrossValidationError = crossValidationError;
+//						optimalK = i;
+//					}
+//
+//				 	writer.write(i + "\t" + crossValidationError);
+//				}
+//
+//				writer.write("optimal: " + optimalK + "\t" + optimalCrossValidationError);
+//				writer.close();
 
-				BufferedWriter writer = new BufferedWriter(new FileWriter("knn_validation"));
-				writer.write("k\tcrossValidationError\n");
-
-				for(int i = 1;i <= 100;i++){
-					double crossValidationError = knn.getCVError(i, 10);
-
-					if(crossValidationError < optimalCrossValidationError){
-						optimalCrossValidationError = crossValidationError;
-						optimalK = i;
-					}
-
-				 	writer.write(i + "\t" + crossValidationError);
-				}
-
-				writer.write("optimal: " + optimalK + "\t" + optimalCrossValidationError);
-				writer.close();
-
-				knn.predict(optimalK, testFilePath, outputFilePath);
+				knn.predict(15, testFilePath, outputFilePath);
 
 			}catch (Exception e){
 				e.printStackTrace();

@@ -1,33 +1,23 @@
 package ml.humaning.core;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.Vector;
+
 
 import ml.humaning.util.Point;
+import ml.humaning.util.Reader;
 
 public class KNN {
 
 	private Point [] allData;
 
 	public KNN(String trainFile) throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(trainFile));
-		String line;
-
-		Vector <Point> tempVector = new Vector<Point>();
-		while((line = reader.readLine()) != null){
-			tempVector.add(new Point(line));
-		}
-
-		allData = new Point[tempVector.size()];
-		allData = tempVector.toArray(allData);
-
-		reader.close();
+		allData = Reader.readPoints(trainFile);
 	}
 
 	private HashSet <Integer> getValidationPoints(int numberOfValidationPoints) {
@@ -74,7 +64,24 @@ public class KNN {
 		return crossValidationError/numberOfFold;
 	}
 
-	public void predict(int k, String testFile, String outputFile){
+	public void predict(int k, String testFile, String outputFile) throws IOException{
+		Point [] testData = Reader.readPoints(testFile);
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+		for(Point testP : testData){
+			int emptyRegion = testP.getEmptyRegion();
+			for(int trainIndex = 0; trainIndex < allData.length;trainIndex++){
+				allData[trainIndex].setBlendingRegion(emptyRegion);
+				allData[trainIndex].setDistanceToReference(-1*testP.cosineSimilarity(allData[trainIndex]));
+				
+			}
+			Arrays.sort(allData);
+			writer.write(classify(allData, k)+"\n");
+//			System.out.println(classify(allData, k)+"");
+			
+		}
+		writer.close();
+		
+
 
 
 	}
