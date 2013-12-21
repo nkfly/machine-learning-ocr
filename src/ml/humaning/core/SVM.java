@@ -18,45 +18,45 @@ public class SVM {
 	
 	public void train(boolean isCrossValidation, int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
 		Command command = new Command();
-		command.add("svm-train");
+		String commandString =  "svm-train ";
 		if(svmType == 0){// C-SVC
-			command.add("-c");// cost
-			command.add(String.valueOf(cost));			
+			commandString +="-c ";// cost
+			commandString +=String.valueOf(cost)+" ";			
 		}else if(svmType == 1){// nu-SVC
-			command.add("-n");// nu
-			command.add(String.valueOf(nu));			
+			commandString +="-n ";// nu
+			commandString +=String.valueOf(nu)+" ";			
 		}else if(svmType == 2){// one-class SVM
-			command.add("-n");// nu
-			command.add(String.valueOf(nu));
+			commandString +="-n ";// nu
+			commandString +=String.valueOf(nu)+" ";
 		}else if(svmType == 3){// epsilon-SVR
-			command.add("-c");// cost
-			command.add(String.valueOf(cost));
-			command.add("-p");// epsilon
-			command.add(String.valueOf(epsilon));			
+			commandString +="-c ";// cost
+			commandString +=String.valueOf(cost)+" ";
+			commandString +="-p ";// epsilon
+			commandString +=String.valueOf(epsilon)+" ";			
 		}else if(svmType == 4){// nu-SVR
-			command.add("-c");// cost
-			command.add(String.valueOf(cost));
-			command.add("-n");// nu
-			command.add(String.valueOf(nu));
+			commandString +="-c ";// cost
+			commandString +=String.valueOf(cost)+" ";
+			commandString +="-n ";// nu
+			commandString +=String.valueOf(nu)+" ";
 		}
 		
 		if(kernelType == 0){// linear
 						
 		}else if(kernelType == 1){// polynomial
-			command.add("-d");// degree
-			command.add(String.valueOf(degree));
-			command.add("-g");// gamma
-			command.add(String.valueOf(gamma));
-			command.add("-r");// coef0
-			command.add(String.valueOf(coef));
+			commandString +="-d ";// degree
+			commandString +=String.valueOf(degree)+" ";
+			commandString +="-g ";// gamma
+			commandString +=String.valueOf(gamma)+" ";
+			commandString +="-r ";// coef0
+			commandString +=String.valueOf(coef)+" ";
 		}else if(kernelType == 2){// radial basis
-			command.add("-g");// gamma
-			command.add(String.valueOf(gamma));
+			commandString +="-g ";// gamma
+			commandString +=String.valueOf(gamma)+" ";
 		}else if(kernelType == 3){// sigmoid
-			command.add("-g");// gamma
-			command.add(String.valueOf(gamma));
-			command.add("-r");// coef0
-			command.add(String.valueOf(coef));		
+			commandString +="-g ";// gamma
+			commandString +=String.valueOf(gamma)+" ";
+			commandString +="-r ";// coef0
+			commandString +=String.valueOf(coef)+" ";
 		}
 		
 		
@@ -67,7 +67,7 @@ public class SVM {
 				p.setMaskRegion(maskRegion);
 				trainFileWriter.write(p.toLIBSVMString()+"\n");				
 			}
-			command.call(command.toString()+" " + maskTrainFile);
+			command.call(commandString+maskTrainFile);
 			trainFileWriter.close();
 		}
 		
