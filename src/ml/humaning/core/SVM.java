@@ -1,6 +1,8 @@
 package ml.humaning.core;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -14,6 +16,31 @@ public class SVM {
 	public SVM(String trainFile) throws IOException{
 		allData = Reader.readPoints(trainFile);
 			
+	}
+	
+	public void predict(int svmType, int kernelType, String testFile, String outputFile) throws IOException, InterruptedException{
+		BufferedReader testReader = new BufferedReader(new FileReader(testFile));
+		BufferedWriter predictionWriter = new BufferedWriter(new FileWriter(outputFile));
+		String line = null;
+		String tempPredictFile = "svm-predict.tmp";
+		String tempOutputFile = "svm-output.tmp";
+		Command command = new Command();
+		while((line = testReader.readLine()) != null){
+			BufferedWriter tempWriter = new BufferedWriter(new FileWriter(tempPredictFile));
+			tempWriter.write(line+"\n");
+			Point p = new Point(line);
+			command.call("svm-predict " + "mask"+p.getEmptyRegion()+"_svm"+svmType+"_kernel"+kernelType+".model "+tempPredictFile+" "+ tempOutputFile);
+			
+			BufferedReader tempReader = new BufferedReader(new FileReader(tempOutputFile));
+			predictionWriter.write(tempReader.readLine()+"\n");
+			
+			
+			tempReader.close();
+			tempWriter.close();
+		}
+		testReader.close();
+		predictionWriter.close();
+		
 	}
 	
 	public void train(boolean isCrossValidation, int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
@@ -61,7 +88,7 @@ public class SVM {
 		
 		
 		for(int maskRegion = 1;maskRegion <= 4;maskRegion++){// 4 mask regions
-			String maskTrainFile = "mask"+maskRegion+"_svm"+svmType+"_kernel_"+kernelType; 
+			String maskTrainFile = "mask"+maskRegion+"_svm"+svmType+"_kernel"+kernelType; 
 			BufferedWriter trainFileWriter = new BufferedWriter(new FileWriter(maskTrainFile));
 			for(Point p : allData){
 				p.setMaskRegion(maskRegion);
