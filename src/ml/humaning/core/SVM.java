@@ -41,6 +41,7 @@ public class SVM {
 			
 		}
 		testReader.close();
+		predictionWriter.flush();
 		predictionWriter.close();
 		
 	}
