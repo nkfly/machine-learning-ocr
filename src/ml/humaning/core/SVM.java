@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 import ml.humaning.util.Command;
@@ -14,42 +15,104 @@ import ml.humaning.util.Reader;
 
 public class SVM {
 	private Point [] allData;
+	ArrayList <BufferedWriter> maskPointsWriter;
+	ArrayList <ArrayList <Integer> > lineMapping;
 	public SVM(String trainFile) throws IOException{
 		allData = Reader.readPoints(trainFile);
-			
+
 	}
+	
+	
 	
 	public void predict(int svmType, int kernelType, String testFile, String outputFile) throws IOException, InterruptedException{
 		BufferedReader testReader = new BufferedReader(new FileReader(testFile));
-		BufferedWriter predictionWriter = new BufferedWriter(new FileWriter(outputFile));
+		
+		String testPointsWithMask1 = "mask1.in";
+		String testPointsWithMask2 = "mask2.in";
+		String testPointsWithMask3 = "mask3.in";
+		String testPointsWithMask4 = "mask4.in";
+		
+		maskPointsWriter = new ArrayList <BufferedWriter>();
+		maskPointsWriter.add(new BufferedWriter(new FileWriter(testPointsWithMask1)));
+		maskPointsWriter.add(new BufferedWriter(new FileWriter(testPointsWithMask2)));
+		maskPointsWriter.add(new BufferedWriter(new FileWriter(testPointsWithMask3)));
+		maskPointsWriter.add(new BufferedWriter(new FileWriter(testPointsWithMask4)));
+		
+		lineMapping = new ArrayList <ArrayList <Integer> >();
+		lineMapping.add(new ArrayList <Integer>());
+		lineMapping.add(new ArrayList <Integer>());
+		lineMapping.add(new ArrayList <Integer>());
+		lineMapping.add(new ArrayList <Integer>());
+		
+		int lineNumber = 0;
 		String line = null;
-		String tempPredictFile = "svm-predict.tmp";
-		String tempOutputFile = "svm-output.tmp";
-		Command command = new Command();
+		
 		while((line = testReader.readLine()) != null){
-			BufferedWriter tempWriter = new BufferedWriter(new FileWriter(tempPredictFile));
-			tempWriter.write(line+"\n");
-			tempWriter.flush();
-			tempWriter.close();
 			Point p = new Point(line);
-			command.call("svm-predict " + tempPredictFile+ " mask"+p.getEmptyRegion()+"_svm"+svmType+"_kernel"+kernelType+".model "+ tempOutputFile);
-			
-			File temp = new File(tempOutputFile);
-			BufferedReader tempReader = new BufferedReader(new FileReader(temp));
-			String predictionOfPoint = tempReader.readLine(); 
-			predictionWriter.write(predictionOfPoint+"\n");
-			System.out.println(predictionOfPoint);
-			tempReader.close();
-			temp.delete();
-			tempReader = null;
-			temp = null;
-			tempWriter = null;
-			System.gc();
-			
+			int maskRegion = p.getEmptyRegion();
+			p.setMaskRegion(maskRegion);
+			maskPointsWriter.get(maskRegion-1).write(line+"\n");
+			lineMapping.get(maskRegion-1).add(lineNumber);
+			lineNumber++;
 		}
 		testReader.close();
-		predictionWriter.flush();
-		predictionWriter.close();
+		
+		for(BufferedWriter bw : maskPointsWriter){
+			bw.flush();
+			bw.close();
+		}
+		
+		String mask1Output = "mask1.out";
+		String mask2Output = "mask2.out";
+		String mask3Output = "mask3.out";
+		String mask4Output = "mask4.out";
+		
+		Command command = new Command();
+		command.call("svm-predict " + testPointsWithMask1+ " mask1"+"_svm"+svmType+"_kernel"+kernelType+".model "+ mask1Output);
+		command.call("svm-predict " + testPointsWithMask2+ " mask2"+"_svm"+svmType+"_kernel"+kernelType+".model "+ mask2Output);
+		command.call("svm-predict " + testPointsWithMask3+ " mask3"+"_svm"+svmType+"_kernel"+kernelType+".model "+ mask3Output);
+		command.call("svm-predict " + testPointsWithMask4+ " mask4"+"_svm"+svmType+"_kernel"+kernelType+".model "+ mask4Output);
+		
+		merge(mask1Output, mask2Output, mask3Output, mask4Output, outputFile);
+		
+		
+	}
+	
+	private void merge(String mask1Input, String mask2Input, String mask3Input, String mask4Input,String outputFile) throws IOException{
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+		BufferedReader mask1Reader = new BufferedReader(new FileReader(mask1Input));
+		BufferedReader mask2Reader = new BufferedReader(new FileReader(mask2Input));
+		BufferedReader mask3Reader = new BufferedReader(new FileReader(mask3Input));
+		BufferedReader mask4Reader = new BufferedReader(new FileReader(mask4Input));
+		int lineNumber = 0;
+		int index1 = 0;
+		int index2 = 0;
+		int index3 = 0;
+		int index4 = 0;
+		while(index1 < lineMapping.get(0).size() || index2 < lineMapping.get(1).size()
+				|| index3 < lineMapping.get(2).size() || index4 < lineMapping.get(3).size()){
+			if(index1 < lineMapping.get(0).size() && lineMapping.get(0).get(index1) == lineNumber){
+				writer.write(mask1Reader.readLine()+"\n");
+				index1++;
+			}else if(index2 < lineMapping.get(1).size() && lineMapping.get(1).get(index2) == lineNumber){
+				writer.write(mask2Reader.readLine()+"\n");
+				index2++;
+			}else if(index3 < lineMapping.get(2).size() && lineMapping.get(2).get(index3) == lineNumber){
+				writer.write(mask3Reader.readLine()+"\n");
+				index3++;
+			}else if(index4 < lineMapping.get(3).size() && lineMapping.get(3).get(index4) == lineNumber){
+				writer.write(mask4Reader.readLine()+"\n");
+				index4++;
+			}
+			lineNumber++;
+		}
+		
+		writer.flush();
+		writer.close();
+		mask1Reader.close();
+		mask2Reader.close();
+		mask3Reader.close();
+		mask4Reader.close();
 		
 	}
 	
