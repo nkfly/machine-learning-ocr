@@ -5,8 +5,13 @@ import java.io.InputStream;
 
 public class Command {
 	StringBuffer outBuffer;
+	String command = "";
 	public Command(){
 		
+	}
+	
+	public void add(String param){
+		command = param + " ";	
 	}
 	
 	private void call(Process process) throws InterruptedException, IOException{
@@ -31,6 +36,12 @@ public class Command {
 	
 	public String getStdout(){
 		return outBuffer.toString();
+	}
+	
+	@Override
+	public String toString(){
+		return command;
+		
 	}
 	
 
