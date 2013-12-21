@@ -31,7 +31,7 @@ public class SVM {
 			tempWriter.flush();
 			tempWriter.close();
 			Point p = new Point(line);
-			command.call("svm-predict " + "mask"+p.getEmptyRegion()+"_svm"+svmType+"_kernel"+kernelType+".model "+tempPredictFile+" "+ tempOutputFile);
+			command.call("svm-predict " + tempPredictFile+ " mask"+p.getEmptyRegion()+"_svm"+svmType+"_kernel"+kernelType+".model "+ tempOutputFile);
 			
 			BufferedReader tempReader = new BufferedReader(new FileReader(tempOutputFile));
 			predictionWriter.write(tempReader.readLine()+"\n");
