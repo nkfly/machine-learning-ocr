@@ -39,9 +39,12 @@ public class SVM {
 			String predictionOfPoint = tempReader.readLine(); 
 			predictionWriter.write(predictionOfPoint+"\n");
 			System.out.println(predictionOfPoint);
-			
-			temp.delete();
 			tempReader.close();
+			temp.delete();
+			tempReader = null;
+			temp = null;
+			tempWriter = null;
+			System.gc();
 			
 		}
 		testReader.close();
