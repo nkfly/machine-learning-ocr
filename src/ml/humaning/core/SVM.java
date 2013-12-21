@@ -168,10 +168,9 @@ public class SVM {
 				trainFileWriter.write(p.toLIBSVMString()+"\n");				
 			}
 			command.call(commandString+maskTrainFile);
+			trainFileWriter.flush();
 			trainFileWriter.close();
 		}
-		
-		
 		
 		
 	}
