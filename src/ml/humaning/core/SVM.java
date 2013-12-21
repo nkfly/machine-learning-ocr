@@ -2,6 +2,7 @@ package ml.humaning.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,10 +34,13 @@ public class SVM {
 			Point p = new Point(line);
 			command.call("svm-predict " + tempPredictFile+ " mask"+p.getEmptyRegion()+"_svm"+svmType+"_kernel"+kernelType+".model "+ tempOutputFile);
 			
-			BufferedReader tempReader = new BufferedReader(new FileReader(tempOutputFile));
-			predictionWriter.write(tempReader.readLine()+"\n");
+			File temp = new File(tempOutputFile);
+			BufferedReader tempReader = new BufferedReader(new FileReader(temp));
+			String predictionOfPoint = tempReader.readLine(); 
+			predictionWriter.write(predictionOfPoint+"\n");
+			System.out.println(predictionOfPoint);
 			
-			
+			temp.delete();
 			tempReader.close();
 			
 		}
