@@ -16,7 +16,7 @@ public class Learner {
 			if("-svm".equals(argv[0])){
 				SVM svm = new SVM(argv[1]);
 				//svm.train(false, 0, 2, -1, 2, -1, 0.001, -1, -1);
-				svm.predict(0, 2, argv[1], argv[2]);
+				svm.predict(0, 2, argv[2], argv[3]);
 				
 			}else if("-knn".equals(argv[0])){
 				if(argv.length < 4){
