@@ -11,13 +11,16 @@ public class Learner {
 			printUsage();
 			System.exit(-1);
 		}
-
-		if("-knn".equals(argv[0])){
-			if(argv.length < 4){
-				System.exit(-1);
-			}
-
-			try {
+		
+		try {
+			if("-svm".equals(argv[0])){
+				SVM svm = new SVM(argv[1]);
+				svm.train(false, 0, 2, -1, 2, -1, 0.001, -1, -1);
+				
+			}else if("-knn".equals(argv[0])){
+				if(argv.length < 4){
+					System.exit(-1);
+				}
 				// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
 				KNN knn = new KNN(argv[1]);
 				String testFilePath = argv[2];
@@ -45,10 +48,12 @@ public class Learner {
 
 				knn.predict(15, testFilePath, outputFilePath);
 
-			}catch (Exception e){
-				e.printStackTrace();
 			}
+			
+		}catch (Exception e){
+			e.printStackTrace();
 		}
+
 	}
 
 	public static void printUsage(){

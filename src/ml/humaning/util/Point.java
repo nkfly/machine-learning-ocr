@@ -144,6 +144,16 @@ public class Point implements Comparable <Point>{
 		if (l != 0.0 && pl != 0.0) return this.innerProduct(p)/(l*pl);
 		return 0.0;
 	}
+	
+	public String toLIBSVMString(){
+		String libsvm = zodiac + " ";
+		for(Dimension d : dimensionArray){
+			if(getRegion(d.getDimension()) != maskRegion){
+				libsvm += d.getDimension()+":"+d.getValue()+" ";
+			}
+		}
+		return libsvm.trim();
+	}
 
 	public double distance(Point p){
 		int i = 0;

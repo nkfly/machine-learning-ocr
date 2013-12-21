@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Command {
-	Process process;
 	StringBuffer outBuffer;
 	public Command(){
 		
 	}
 	
-	public void call(String command) throws IOException, InterruptedException{
-		process = Runtime.getRuntime().exec(command);
+	private void call(Process process) throws InterruptedException, IOException{
 		outBuffer = new StringBuffer();
 		int nextChar;
 		process.waitFor();
@@ -20,7 +18,15 @@ public class Command {
 		   {
 		    outBuffer.append((char)nextChar);
 		   }
+	}
+	
+	public void call(String command) throws IOException, InterruptedException{
+		call(Runtime.getRuntime().exec(command));
 		
+	}
+	
+	public void call(String [] command) throws IOException, InterruptedException{
+		call(Runtime.getRuntime().exec(command));		
 	}
 	
 	public String getStdout(){
