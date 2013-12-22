@@ -72,8 +72,8 @@ public class KNN {
 			testP.setMaskRegion(emptyRegion);
 			for(int trainIndex = 0; trainIndex < allData.length;trainIndex++){
 				allData[trainIndex].setMaskRegion(emptyRegion);
-				//allData[trainIndex].setDistanceToReference(-1*testP.cosineSimilarity(allData[trainIndex]));
-				allData[trainIndex].setDistanceToReference(testP.distance(allData[trainIndex], true));
+				allData[trainIndex].setDistanceToReference(-1*testP.cosineSimilarity(allData[trainIndex]));
+				//allData[trainIndex].setDistanceToReference(testP.distance(allData[trainIndex], true));
 				
 			}
 			Arrays.sort(allData);
