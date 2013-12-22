@@ -15,8 +15,13 @@ public class Learner {
 		try {
 			if("-svm".equals(argv[0])){
 				SVM svm = new SVM(argv[1]);
-				svm.train(false, 0, 2, -1, 2, -1, 1, -1, -1);
-				svm.predict(0, 2, argv[2], argv[3]);
+				for(int c = 1000; c <= 10000;c += 1000){
+					for(double gamma = 0.00001; gamma < 0.0001;gamma += 0.00001){
+						svm.train(true, 0, 2, -1, gamma, -1, c, -1, -1);
+					}
+				}
+				
+				//svm.predict(0, 2, argv[2], argv[3]);
 				
 			}else if("-knn".equals(argv[0])){
 				if(argv.length < 4){
