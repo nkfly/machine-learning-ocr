@@ -117,7 +117,7 @@ public class SVM {
 	}
 	
 	public void train(boolean isCrossValidation, int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
-		Command command = new Command();
+		
 		String commandString =  "svm-train ";
 		if(svmType == 0){// C-SVC
 			commandString +="-c ";// cost
@@ -160,21 +160,49 @@ public class SVM {
 		}
 		
 		
-		for(int maskRegion = 1;maskRegion <= 4;maskRegion++){// 4 mask regions
-			String maskTrainFile = "mask"+maskRegion+"_svm"+svmType+"_kernel"+kernelType; 
-			BufferedWriter trainFileWriter = new BufferedWriter(new FileWriter(maskTrainFile));
-			for(Point p : allData){
-				p.setMaskRegion(maskRegion);
-				trainFileWriter.write(p.toLIBSVMString()+"\n");				
+		Command command = new Command();
+		if(isCrossValidation){
+			String trainFile = "svm"+svmType+"_kernel"+kernelType;
+			command.call(commandString+" -v 5 "+trainFile);
+			String stdout = command.getStdout();
+			String accuracyPercent = stdout.substring(stdout.indexOf("Accuracy")).split("\\s+")[2];
+			double accuracy = Double.parseDouble(accuracyPercent.substring(0, accuracyPercent.length()-1));
+			
+			File accuracyRecord = new File(trainFile+".record");
+			if(accuracyRecord.exists()) {
+				BufferedReader accuracyReader = new BufferedReader(new FileReader(accuracyRecord));
+				double recordAccuracy = Double.parseDouble(accuracyReader.readLine());
+				if(accuracy > recordAccuracy){
+					accuracyReader.close();
+					accuracyRecord.delete();
+					BufferedWriter accuracyWriter = new BufferedWriter(new FileWriter(accuracyRecord));
+					accuracyWriter.write(String.valueOf(accuracy)+"\n");
+					accuracyWriter.write(commandString+"\n");
+					accuracyWriter.flush();
+					accuracyWriter.close();
+				}
+				
+			}else {
+				BufferedWriter accuracyWriter = new BufferedWriter(new FileWriter(accuracyRecord));
+				accuracyWriter.write(String.valueOf(accuracy)+"\n");
+				accuracyWriter.write(commandString+"\n");
+				accuracyWriter.flush();
+				accuracyWriter.close();
 			}
-			command.call(commandString+maskTrainFile);
-			trainFileWriter.flush();
-			trainFileWriter.close();
+			
+			
+		}else {
+			for(int maskRegion = 1;maskRegion <= 4;maskRegion++){// 4 mask regions
+				String maskTrainFile = "mask"+maskRegion+"_svm"+svmType+"_kernel"+kernelType; 
+				BufferedWriter trainFileWriter = new BufferedWriter(new FileWriter(maskTrainFile));
+				for(Point p : allData){
+					p.setMaskRegion(maskRegion);
+					trainFileWriter.write(p.toLIBSVMString()+"\n");				
+				}
+				command.call(commandString+maskTrainFile);
+				trainFileWriter.flush();
+				trainFileWriter.close();
+			}	
 		}
-		
-		
 	}
-	
-
-
 }
