@@ -15,10 +15,12 @@ import ml.humaning.util.Reader;
 
 public class SVM {
 	private Point [] allData;
-	ArrayList <BufferedWriter> maskPointsWriter;
-	ArrayList <ArrayList <Integer> > lineMapping;
+	private ArrayList <BufferedWriter> maskPointsWriter;
+	private ArrayList <ArrayList <Integer> > lineMapping;
+	private String trainFile;
 	public SVM(String trainFile) throws IOException{
 		allData = Reader.readPoints(trainFile);
+		this.trainFile = trainFile;
 
 	}
 	
@@ -162,13 +164,13 @@ public class SVM {
 		
 		Command command = new Command();
 		if(isCrossValidation){
-			String trainFile = "svm"+svmType+"_kernel"+kernelType;
+			String configurationFile = "svm"+svmType+"_kernel"+kernelType;
 			command.call(commandString+" -v 5 "+trainFile);
 			String stdout = command.getStdout();
 			String accuracyPercent = stdout.substring(stdout.indexOf("Accuracy")).split("\\s+")[2];
 			double accuracy = Double.parseDouble(accuracyPercent.substring(0, accuracyPercent.length()-1));
 			
-			File accuracyRecord = new File(trainFile+".record");
+			File accuracyRecord = new File(configurationFile+".record");
 			if(accuracyRecord.exists()) {
 				BufferedReader accuracyReader = new BufferedReader(new FileReader(accuracyRecord));
 				double recordAccuracy = Double.parseDouble(accuracyReader.readLine());
