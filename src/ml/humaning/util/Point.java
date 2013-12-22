@@ -154,34 +154,58 @@ public class Point implements Comparable <Point>{
 		}
 		return libsvm.trim();
 	}
+	
+	
+	
 
-	public double distance(Point p){
+	public double distance(Point p, boolean isNormalized){
 		int i = 0;
 		int j = 0;
 		double distance = 0.0;
+		
+		double myLength = 0.0;
+		double pLength = 0.0;
+		if(isNormalized){
+			myLength = this.length();
+			pLength = p.length();
+		}
 
 		while (i < this.dimensionArray.length && j < p.dimensionArray.length) {
 			if (this.dimensionArray[i].getDimension() < p.dimensionArray[j].getDimension() ) {
-				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
+				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion){
+					if(isNormalized)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue()/(myLength*myLength));
+					else distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());						
+				}
 				i++;
 			} else if (this.dimensionArray[i].getDimension() > p.dimensionArray[j].getDimension()) {
-				if(getRegion(p.dimensionArray[j].getDimension()) != maskRegion)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
+				if(getRegion(p.dimensionArray[j].getDimension()) != maskRegion){
+					if(isNormalized)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue()/(pLength*pLength));
+					else distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
+				}
 				j++;
 			} else {
-				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)distance += (this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue())*
-						(this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue());
+				if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion){
+					if(isNormalized)distance += (this.dimensionArray[i].getValue()/myLength-p.dimensionArray[j].getValue()/pLength)*(this.dimensionArray[i].getValue()/myLength-p.dimensionArray[j].getValue()/pLength);
+					else distance += (this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue())*(this.dimensionArray[i].getValue()-p.dimensionArray[j].getValue()); 
+				}
 				i++;
 				j++;
 			}
 		}
 
 		while (i < this.dimensionArray.length) {
-			if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
+			if(getRegion(this.dimensionArray[i].getDimension()) != maskRegion){
+				if(isNormalized)distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue()/(myLength*myLength));
+				else distance += (this.dimensionArray[i].getValue()*this.dimensionArray[i].getValue());
+			}
 			i++;
 		}
 
 		while (j < p.dimensionArray.length) {
-			if(getRegion(p.dimensionArray[j].getDimension()) != maskRegion)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
+			if(getRegion(p.dimensionArray[j].getDimension()) != maskRegion){
+				if(isNormalized)distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue()/(pLength*pLength));
+				else distance += (p.dimensionArray[j].getValue()*p.dimensionArray[j].getValue());
+			}
 			j++;
 		}
 
