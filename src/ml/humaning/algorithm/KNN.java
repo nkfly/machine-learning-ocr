@@ -1,4 +1,4 @@
-package ml.humaning.core;
+package ml.humaning.algorithm;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

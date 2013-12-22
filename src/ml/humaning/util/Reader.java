@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Reader {
+
 	public static Point [] readPoints(String fileName) throws IOException{
 		BufferedReader reader = new BufferedReader(new FileReader(fileName));
 		String line;
@@ -20,7 +21,7 @@ public class Reader {
 
 		reader.close();
 		return data;
-		
+
 	}
 
 }
