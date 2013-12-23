@@ -31,6 +31,8 @@ public class ZodiacCharacterRecognizer {
 				runSVM(line);
 			} else if ("knn".equals(algorithm)) {
 				runKNN(line);
+			} else if("ann".equals(algorithm)) {
+				runANN(line);
 			}
 
 		} catch (ParseException e) {
@@ -70,6 +72,22 @@ public class ZodiacCharacterRecognizer {
 				svm.train(true, 1, 2, -1, gamma, -1, -1, nu, -1);
 			}
 		}
+	}
+	
+	public static void runANN(CommandLine line) throws Exception {
+		if (!line.hasOption("train-file") ||
+				!line.hasOption("test-file") ||
+				!line.hasOption("output")) {
+
+			printUsage();
+			return;
+		}
+		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
+		KNN knn = new KNN(line.getOptionValue("train-file"));
+		String testFilePath = line.getOptionValue("test-file");
+		String outputFilePath = line.getOptionValue("output");
+
+		knn.predict(15, testFilePath, outputFilePath);
 	}
 
 	public static void runKNN(CommandLine line) throws Exception {

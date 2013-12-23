@@ -44,18 +44,7 @@ public class Point implements Comparable <Point>{
 	 *  --------------------
 	 */
 	
-	public int getEmptyRegion(){
-=======
-	 *  |         |         |
-	 *  |    1    |    2    |
-	 *  |         |         |
-	 *  --------------------
-	 *  |         |         |
-	 *  |    3    |    4    |
-	 *  |         |         |
-	 *  --------------------
-	 */
-	
+
 	private int getRegion(int pixel){
 		int row = (pixel-1) / 105;
 		int col = (pixel-1) % 105;
@@ -73,7 +62,6 @@ public class Point implements Comparable <Point>{
 				return 4;
 			}
 		}
->>>>>>> 6df8eb1c42c25fe32db6a33db76d5f2a76182c0c
 		
 	}
 	public int getEmptyRegion(){

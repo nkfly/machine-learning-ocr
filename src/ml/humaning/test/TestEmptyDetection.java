@@ -2,7 +2,6 @@ package ml.humaning.test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Vector;
 
 import ml.humaning.util.Point;
@@ -26,7 +25,7 @@ public class TestEmptyDetection {
 			allData = tempVector.toArray(allData);
 
 			reader.close();
-<<<<<<< HEAD
+
 			
 			/*
 			 * Test Empty Detection
@@ -41,14 +40,7 @@ public class TestEmptyDetection {
 			
 			
 			
-=======
 
-			for (int x = 0;x<allData.length;x++)
-				System.out.println("[Empty]" + allData[x].getEmptyRegion());
-
-			System.out.println("Data size: " + allData.length);
-
->>>>>>> 6df8eb1c42c25fe32db6a33db76d5f2a76182c0c
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
