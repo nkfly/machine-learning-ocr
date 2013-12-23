@@ -32,14 +32,15 @@ public class Point implements Comparable <Point>{
 	 * get the empty region
 	 *  --------------------
 	 *  |        |         |
-	 *  |   1    |    2    |
+	 *  |   0    |    1    |
 	 *  |        |         |
 	 *  --------------------
 	 *  |        |         |
-	 *  |   3    |    4    |
+	 *  |   2    |    3    |
 	 *  |        |         |
 	 *  --------------------
 	 */
+	
 	public int getEmptyRegion(){
 		
 		int[] region = new int[4];

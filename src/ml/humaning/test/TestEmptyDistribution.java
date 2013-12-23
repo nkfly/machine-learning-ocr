@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import ml.humaning.util.Point;
 
-public class TestEmptyDetection {
+public class TestEmptyDistribution {
 	public static void main(String [] argv){
 		
 		
@@ -31,12 +31,18 @@ public class TestEmptyDetection {
 			reader.close();
 			
 			/*
-			 * Test Empty Detection
+			 * Test Empty Detection Distribution
 			 */
-			for (int x= 0;x<allData.length;x++)
-				System.out.println("[Empty]" + allData[x].getEmptyRegion());
+			int[][] zodiacEmptyDistibution = new int[12][4];
 			
-			
+			for (int x= 0;x<allData.length;x++){
+				zodiacEmptyDistibution[allData[x].getZodiac() -1 ][allData[x].getEmptyRegion()] +=1;
+			}
+			for (int x= 0;x<zodiacEmptyDistibution.length;x++){
+				System.out.println(""+(x+1)+","+ zodiacEmptyDistibution[x][0]+","+zodiacEmptyDistibution[x][1]+","+
+						zodiacEmptyDistibution[x][2]+","+zodiacEmptyDistibution[x][3]);
+				
+			}
 			
 			System.out.println("Data size: "+ allData.length);
 			

@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import ml.humaning.util.Point;
 
-public class TestEmptyDetection {
+public class TestAverageImage {
 	public static void main(String [] argv){
 		
 		
@@ -33,9 +33,9 @@ public class TestEmptyDetection {
 			/*
 			 * Test Empty Detection
 			 */
-			for (int x= 0;x<allData.length;x++)
+			for (int x= 0;x<allData.length;x++){
 				System.out.println("[Empty]" + allData[x].getEmptyRegion());
-			
+			}
 			
 			
 			System.out.println("Data size: "+ allData.length);
