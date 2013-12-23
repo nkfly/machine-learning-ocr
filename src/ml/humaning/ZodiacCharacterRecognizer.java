@@ -88,7 +88,7 @@ public class ZodiacCharacterRecognizer {
 		String testFilePath = line.getOptionValue("test-file");
 		String outputFilePath = line.getOptionValue("output");
 		ann.train(line.getOptionValue("train-file"));
-		ann.predict(testFilePath);
+		ann.predict(testFilePath, outputFilePath);
 
 		//knn.predict(15, testFilePath, outputFilePath);
 	}
