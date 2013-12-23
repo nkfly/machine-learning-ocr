@@ -1,7 +1,7 @@
 CLASSPATH := bin:src
-CLASSPATH := $(CLASSPATH):libs/commons-cli-1.2/commons-cli-1.2.jar
+CLASSPATH := $(CLASSPATH):libs/commons-cli-1.2/commons-cli-1.2.jar:libs/weka.jar
 
-ALGORITHM = knn
+ALGORITHM = ann
 
 # files
 TRAIN_FILE = ./data/ml2013final_train.dat
