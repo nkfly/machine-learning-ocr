@@ -33,7 +33,6 @@ public class Point implements Comparable <Point>{
 	/*
 	 * get the empty region
 	 *  --------------------
-<<<<<<< HEAD
 	 *  |        |         |
 	 *  |   0    |    1    |
 	 *  |        |         |
