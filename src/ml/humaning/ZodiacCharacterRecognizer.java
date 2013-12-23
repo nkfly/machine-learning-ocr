@@ -8,6 +8,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
+import ml.humaning.algorithm.ANN;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
 
@@ -83,11 +84,11 @@ public class ZodiacCharacterRecognizer {
 			return;
 		}
 		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
-		KNN knn = new KNN(line.getOptionValue("train-file"));
+		ANN ann = new ANN(line.getOptionValue("train-file"));
 		String testFilePath = line.getOptionValue("test-file");
 		String outputFilePath = line.getOptionValue("output");
 
-		knn.predict(15, testFilePath, outputFilePath);
+		//knn.predict(15, testFilePath, outputFilePath);
 	}
 
 	public static void runKNN(CommandLine line) throws Exception {
