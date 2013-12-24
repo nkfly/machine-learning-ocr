@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import weka.classifiers.functions.LibSVM;
 import weka.core.Instances;
+import weka.core.SelectedTag;
 import weka.core.converters.LibSVMLoader;
 
 import ml.humaning.util.Command;
@@ -124,6 +125,7 @@ public class SVM {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(trainFile));
 		Instances data = libsvmLoader.getDataSet();
+		libsvm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_ONE_CLASS_SVM, LibSVM.TAGS_SVMTYPE));
 		libsvm.buildClassifier(data);
 		
 		libsvmLoader.setSource(new File(testFile));
