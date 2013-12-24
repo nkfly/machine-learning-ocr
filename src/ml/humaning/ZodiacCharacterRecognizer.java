@@ -68,7 +68,8 @@ public class ZodiacCharacterRecognizer {
 		}
 
 		SVM svm = new SVM(line.getOptionValue("train-file"));
-		svm.wekaLibSVM(line.getOptionValue("train-file"), line.getOptionValue("test-file"), line.getOptionValue("output"));
+		svm.parallelCrossValidationSVM(3, 2);
+		//svm.wekaLibSVM(line.getOptionValue("train-file"), line.getOptionValue("test-file"), line.getOptionValue("output"));
 //		for(double nu = 0.000005; nu <= 50;nu  *= 10){
 //			for(double gamma = 0.00001; gamma < 0.0001;gamma += 0.00001){
 //				svm.train(true, 1, 2, -1, gamma, -1, -1, nu, -1);

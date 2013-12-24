@@ -7,12 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import weka.classifiers.functions.LibSVM;
-import weka.core.Attribute;
-import weka.core.Instances;
-import weka.core.SelectedTag;
-import weka.core.converters.LibSVMLoader;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import ml.humaning.util.Command;
 import ml.humaning.util.Point;
@@ -23,6 +19,7 @@ public class SVM {
 	private ArrayList <BufferedWriter> maskPointsWriter;
 	private ArrayList <ArrayList <Integer> > lineMapping;
 	private String trainFile;
+	private Executor pool;
 	public SVM(String trainFile) throws IOException{
 		allData = Reader.readPoints(trainFile);
 		this.trainFile = trainFile;
@@ -121,36 +118,9 @@ public class SVM {
 
 	}
 	
-	public void wekaLibSVM(String trainFile, String testFile, String outputFile) throws Exception{
-		LibSVM libsvm = new LibSVM(); 
-		LibSVMLoader libsvmLoader = new LibSVMLoader();
-		libsvmLoader.setSource(new File(trainFile));
-		Instances data = libsvmLoader.getDataSet();
-		
-		for (int i = 0; i < data.numInstances(); i++) {
-			data.instance(i).setValue(data.instance(i).classAttribute(),  String.valueOf(data.instance(i).classValue()));
-		}
-		
-		//libsvm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_ONE_CLASS_SVM, LibSVM.TAGS_SVMTYPE));
-		libsvm.buildClassifier(data);
-		
-		libsvmLoader.setSource(new File(testFile));
-		Instances test = libsvmLoader.getDataSet();
-		
-		BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
-
-		for (int i = 0; i < test.numInstances(); i++) {
-			double pred = libsvm.classifyInstance(test.instance(i));
-			bw.write(test.classAttribute().value((int) pred)+"\n");
-		}
-
-		bw.close();
-		
-		
-	}
-
-	public void train(boolean isCrossValidation, int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
-
+	
+	
+	private String processTrainCommand(int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon){
 		String commandString =  "svm-train ";
 		if(svmType == 0){// C-SVC
 			commandString +="-c ";// cost
@@ -191,51 +161,100 @@ public class SVM {
 			commandString +="-r ";// coef0
 			commandString +=String.valueOf(coef)+" ";
 		}
+		
+		return commandString;
 
+		
+		
+	}
+	
+	private class Trainer implements Runnable{
+		
+		private SVM svm;
+		private String command;
+		private String accuracyRecord;
+		public Trainer(SVM svm, String command, String ar){
+			this.svm = svm;
+			this.command = command;
+			this.accuracyRecord = ar;
+			
+		}
 
+		@Override
+		public void run() {
+			try {
+				Command commander = new Command();
+				commander.call(command);
+				String stdout = commander.getStdout();
+				String accuracyPercent = stdout.substring(stdout.indexOf("Accuracy")).split("\\s+")[2];
+				double accuracy = Double.parseDouble(accuracyPercent.substring(0, accuracyPercent.length()-1));
+				svm.updateAccuracyRecord(accuracyRecord, accuracy, command);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+	}
+	
+	public synchronized void updateAccuracyRecord(String accuracyRecordPath, double accuracy, String command) throws IOException{
+		File accuracyRecord = new File(accuracyRecordPath);
+        if(accuracyRecord.exists()) {
+                BufferedReader accuracyReader = new BufferedReader(new FileReader(accuracyRecord));
+                double recordAccuracy = Double.parseDouble(accuracyReader.readLine());
+                if(accuracy > recordAccuracy){
+                        accuracyReader.close();
+                        accuracyRecord.delete();
+                        BufferedWriter accuracyWriter = new BufferedWriter(new FileWriter(accuracyRecord));
+                        accuracyWriter.write(String.valueOf(accuracy)+"\n");
+                        accuracyWriter.write(command+"\n");
+                        accuracyWriter.close();
+                }
+
+        }else {
+                BufferedWriter accuracyWriter = new BufferedWriter(new FileWriter(accuracyRecord));
+                accuracyWriter.write(String.valueOf(accuracy)+"\n");
+                accuracyWriter.write(command+"\n");
+                accuracyWriter.close();
+        }
+		
+	}
+	
+	public void parallelCrossValidationSVM(int svmType, int kernelType) throws IOException, InterruptedException{
+		
+		String configurationFile = "svm"+svmType+"_kernel"+kernelType;
+		int threadNumber = 15;
+		pool = Executors.newFixedThreadPool(threadNumber);
+		
+		for(double c = 1.0 ;c <= 100000.0; c *= 10){
+			for(int p = 3; p <= 10;p += 1){
+				for(double gamma = 0.0001;gamma <= 0.001;gamma += 0.0001){
+					String commandString = processTrainCommand(svmType, kernelType, p, gamma, -1, c, -1, -1);
+		            pool.execute(new Trainer(this, commandString+" -v 5 "+trainFile, configurationFile+".record"));
+				}
+			}
+		}				
+	}
+
+	public void train(int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
+
+		String commandString = processTrainCommand(svmType, kernelType, degree, gamma, coef, cost, nu, epsilon);
 		Command command = new Command();
-		if(isCrossValidation){
-			String configurationFile = "svm"+svmType+"_kernel"+kernelType;
-			command.call(commandString+" -v 5 "+trainFile);
-			String stdout = command.getStdout();
-			String accuracyPercent = stdout.substring(stdout.indexOf("Accuracy")).split("\\s+")[2];
-			double accuracy = Double.parseDouble(accuracyPercent.substring(0, accuracyPercent.length()-1));
-
-			File accuracyRecord = new File(configurationFile+".record");
-			if(accuracyRecord.exists()) {
-				BufferedReader accuracyReader = new BufferedReader(new FileReader(accuracyRecord));
-				double recordAccuracy = Double.parseDouble(accuracyReader.readLine());
-				if(accuracy > recordAccuracy){
-					accuracyReader.close();
-					accuracyRecord.delete();
-					BufferedWriter accuracyWriter = new BufferedWriter(new FileWriter(accuracyRecord));
-					accuracyWriter.write(String.valueOf(accuracy)+"\n");
-					accuracyWriter.write(commandString+"\n");
-					accuracyWriter.flush();
-					accuracyWriter.close();
-				}
-
-			}else {
-				BufferedWriter accuracyWriter = new BufferedWriter(new FileWriter(accuracyRecord));
-				accuracyWriter.write(String.valueOf(accuracy)+"\n");
-				accuracyWriter.write(commandString+"\n");
-				accuracyWriter.flush();
-				accuracyWriter.close();
+		for(int maskRegion = 1;maskRegion <= 4;maskRegion++){// 4 mask regions
+			String maskTrainFile = "mask"+maskRegion+"_svm"+svmType+"_kernel"+kernelType;
+			BufferedWriter trainFileWriter = new BufferedWriter(new FileWriter(maskTrainFile));
+			for(Point p : allData){
+				p.setMaskRegion(maskRegion);
+				trainFileWriter.write(p.toLIBSVMString()+"\n");
 			}
-
-
-		}else {
-			for(int maskRegion = 1;maskRegion <= 4;maskRegion++){// 4 mask regions
-				String maskTrainFile = "mask"+maskRegion+"_svm"+svmType+"_kernel"+kernelType;
-				BufferedWriter trainFileWriter = new BufferedWriter(new FileWriter(maskTrainFile));
-				for(Point p : allData){
-					p.setMaskRegion(maskRegion);
-					trainFileWriter.write(p.toLIBSVMString()+"\n");
-				}
-				command.call(commandString+maskTrainFile);
-				trainFileWriter.flush();
-				trainFileWriter.close();
-			}
+			command.call(commandString+maskTrainFile);			
+			trainFileWriter.close();
 		}
 	}
 }
