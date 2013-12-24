@@ -125,7 +125,12 @@ public class SVM {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(trainFile));
 		Instances data = libsvmLoader.getDataSet();
-		libsvm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_ONE_CLASS_SVM, LibSVM.TAGS_SVMTYPE));
+		
+		for (int i = 0; i < data.numInstances(); i++) {
+			data.instance(i).setClassValue(String.valueOf(data.instance(i).classValue()));
+		}
+		
+		//libsvm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_ONE_CLASS_SVM, LibSVM.TAGS_SVMTYPE));
 		libsvm.buildClassifier(data);
 		
 		libsvmLoader.setSource(new File(testFile));
