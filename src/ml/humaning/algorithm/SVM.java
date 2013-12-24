@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import weka.classifiers.functions.LibSVM;
+import weka.core.Attribute;
 import weka.core.Instances;
 import weka.core.SelectedTag;
 import weka.core.converters.LibSVMLoader;
@@ -127,7 +128,7 @@ public class SVM {
 		Instances data = libsvmLoader.getDataSet();
 		
 		for (int i = 0; i < data.numInstances(); i++) {
-			data.instance(i).setClassValue(String.valueOf(data.instance(i).classValue()));
+			data.instance(i).setValue(data.instance(i).classAttribute(),  String.valueOf(data.instance(i).classValue()));
 		}
 		
 		//libsvm.setSVMType(new SelectedTag(LibSVM.SVMTYPE_ONE_CLASS_SVM, LibSVM.TAGS_SVMTYPE));
