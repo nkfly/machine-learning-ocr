@@ -30,21 +30,26 @@ public class Point implements Comparable <Point>{
 	public void setMaskRegion(int r){
 		maskRegion = r;		
 	}
+	public Dimension[] getDimensionArray() {
+		return dimensionArray;
+	}
+	
+	
 	/*
 	 * get the empty region
 	 *  --------------------
 	 *  |        |         |
-	 *  |   0    |    1    |
+	 *  |   1    |    2    |
 	 *  |        |         |
 	 *  --------------------
 	 *  |        |         |
-	 *  |   2    |    3    |
+	 *  |   3    |    4    |
 	 *  |        |         |
 	 *  --------------------
 	 */
 	
 
-	private int getRegion(int pixel){
+	public int getRegion(int pixel){
 		int row = (pixel-1) / 105;
 		int col = (pixel-1) % 105;
 
