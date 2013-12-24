@@ -4,6 +4,8 @@
 	<classpathentry kind="lib" path="libs/Jama-1.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/commons-cli-1.2/commons-cli-1.2.jar"/>
 	<classpathentry kind="lib" path="libs/weka.jar"/>
+	<classpathentry kind="lib" path="libs/libsvm.jar"/>
+	<classpathentry kind="lib" path="libs/wlsvm.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

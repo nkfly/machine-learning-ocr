@@ -22,6 +22,8 @@ public class ANN {
 
 		multilayerPerceptron = new MultilayerPerceptron();
 		multilayerPerceptron.buildClassifier(data);
+		
+		
 
 	}
 

@@ -8,6 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import weka.classifiers.functions.LibSVM;
+import weka.core.Instances;
+import weka.core.converters.LibSVMLoader;
+
 import ml.humaning.util.Command;
 import ml.humaning.util.Point;
 import ml.humaning.util.Reader;
@@ -113,6 +117,28 @@ public class SVM {
 		mask3Reader.close();
 		mask4Reader.close();
 
+	}
+	
+	public void wekaLibSVM(String trainFile, String testFile, String outputFile) throws Exception{
+		LibSVM libsvm = new LibSVM(); 
+		LibSVMLoader libsvmLoader = new LibSVMLoader();
+		libsvmLoader.setSource(new File(trainFile));
+		Instances data = libsvmLoader.getDataSet();
+		libsvm.buildClassifier(data);
+		
+		libsvmLoader.setSource(new File(testFile));
+		Instances test = libsvmLoader.getDataSet();
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
+
+		for (int i = 0; i < test.numInstances(); i++) {
+			double pred = libsvm.classifyInstance(test.instance(i));
+			bw.write(test.classAttribute().value((int) pred)+"\n");
+		}
+
+		bw.close();
+		
+		
 	}
 
 	public void train(boolean isCrossValidation, int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
