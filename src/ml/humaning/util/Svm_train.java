@@ -75,11 +75,11 @@ public class Svm_train {
 				sumyy += y*y;
 				sumvy += v*y;
 			}
-			System.out.print("Cross Validation Mean squared error = "+total_error/prob.l+"\n");
-			System.out.print("Cross Validation Squared correlation coefficient = "+
-				((prob.l*sumvy-sumv*sumy)*(prob.l*sumvy-sumv*sumy))/
-				((prob.l*sumvv-sumv*sumv)*(prob.l*sumyy-sumy*sumy))+"\n"
-				);
+			//System.out.print("Cross Validation Mean squared error = "+total_error/prob.l+"\n");
+//			System.out.print("Cross Validation Squared correlation coefficient = "+
+//				((prob.l*sumvy-sumv*sumy)*(prob.l*sumvy-sumv*sumy))/
+//				((prob.l*sumvv-sumv*sumv)*(prob.l*sumyy-sumy*sumy))+"\n"
+//				);
 		}
 		else
 		{
