@@ -122,7 +122,7 @@ public class SVM {
 	
 	
 	private String processTrainCommand(int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon){
-		String commandString =  "svm-train ";
+		String commandString =  "";
 		if(svmType == 0){// C-SVC
 			commandString +="-c ";// cost
 			commandString +=String.valueOf(cost)+" ";
