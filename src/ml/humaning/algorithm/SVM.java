@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import ml.humaning.util.Command;
 import ml.humaning.util.Point;
 import ml.humaning.util.Reader;
+import ml.humaning.util.Svm_train;
 
 public class SVM {
 	private Point [] allData;
@@ -162,6 +163,8 @@ public class SVM {
 			commandString +=String.valueOf(coef)+" ";
 		}
 		
+		commandString += ("-s " + svmType + " -t "+ kernelType + " "); 
+		
 		return commandString;
 
 		
@@ -182,21 +185,17 @@ public class SVM {
 
 		@Override
 		public void run() {
-			try {
-				Command commander = new Command();
-				commander.call(command);
-				String stdout = commander.getStdout();
-				String accuracyPercent = stdout.substring(stdout.indexOf("Accuracy")).split("\\s+")[2];
-				double accuracy = Double.parseDouble(accuracyPercent.substring(0, accuracyPercent.length()-1));
-				svm.updateAccuracyRecord(accuracyRecord, accuracy, command);
+	
+				Svm_train trainer = new Svm_train();
+				try {
+					double accuracy = trainer.run(command.split("\\s+"));
+					svm.updateAccuracyRecord(accuracyRecord, accuracy, command);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
 				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
 			
 		}
 		
@@ -229,7 +228,7 @@ public class SVM {
 	public void parallelCrossValidationSVM(int svmType, int kernelType) throws IOException, InterruptedException{
 		
 		String configurationFile = "svm"+svmType+"_kernel"+kernelType;
-		int threadNumber = 10;
+		int threadNumber = 13;
 		pool = Executors.newFixedThreadPool(threadNumber);
 		
 		for(double c = 1.0 ;c <= 100000.0; c *= 10){
