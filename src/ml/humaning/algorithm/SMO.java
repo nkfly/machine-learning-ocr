@@ -9,6 +9,8 @@ import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.core.converters.LibSVMLoader;
 import weka.core.converters.LibSVMSaver;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 
 public class SMO {
 	Instances data;
@@ -17,6 +19,10 @@ public class SMO {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(trainFile));
 		data = libsvmLoader.getDataSet();
+		
+		NumericToNominal filter = new NumericToNominal();
+        filter.setInputFormat(data);
+        data = Filter.useFilter(data, filter);
 		
 		smo = new weka.classifiers.functions.SMO();
 		smo.buildClassifier(data);
