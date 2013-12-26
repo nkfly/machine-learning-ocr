@@ -12,6 +12,8 @@ import ml.humaning.algorithm.ANN;
 import ml.humaning.algorithm.SMO;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
+import ml.humaning.util.Preprocess;
+import ml.humaning.util.SVD;
 
 public class ZodiacCharacterRecognizer {
 	static Options options;
@@ -20,8 +22,13 @@ public class ZodiacCharacterRecognizer {
 		prepareOptions();
 
 		CommandLineParser parser = new GnuParser();
+		
+
 
 		try {
+			SVD svd = new SVD(12800, argv[0]);
+			svd.decompose(300, argv[1]);
+
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
 				printUsage();
@@ -83,7 +90,6 @@ public class ZodiacCharacterRecognizer {
 			printUsage();
 			return;
 		}
-		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
 		SMO smo = new SMO();
 		String testFilePath = line.getOptionValue("test-file");
 		String outputFilePath = line.getOptionValue("output");
@@ -121,7 +127,6 @@ public class ZodiacCharacterRecognizer {
 		KNN knn = new KNN(line.getOptionValue("train-file"));
 		String testFilePath = line.getOptionValue("test-file");
 		String outputFilePath = line.getOptionValue("output");
-
 		knn.predict(15, testFilePath, outputFilePath);
 	}
 }

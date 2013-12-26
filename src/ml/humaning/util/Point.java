@@ -217,4 +217,16 @@ public class Point implements Comparable <Point>{
 
 		return distance;
 	}
+	
+	public String cutThreshold(double threshold){
+		String representation = zodiac + " ";
+		for(Dimension d : dimensionArray){
+			if(d.getValue() > threshold){
+				representation += d.getDimension()+":"+d.getValue()+" ";
+			}
+		}
+		return representation.trim();
+	}
+	
+
 }

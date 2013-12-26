@@ -1,0 +1,1 @@
+-a knn -tr  D:\立遠緊急輩分\立遠資料\102-1課程\machine-learning\ml2013final_train_cutthreshold.dat -te D:\立遠緊急輩分\立遠資料\102-1課程\machine-learning\ml2013final_test.dat -o output.txt

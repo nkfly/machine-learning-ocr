@@ -1,5 +1,12 @@
 package ml.humaning.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Preprocess {
 	
 	public static int[] max_boundary = {105,0,0,105};
@@ -115,6 +122,22 @@ public class Preprocess {
 		
 		if(left < max_boundary[3])
 			max_boundary[3] =left;
+	}
+	
+	public static void cutThreshold(String input, String output, double threshold) throws IOException{
+		
+		BufferedReader br = new BufferedReader(new FileReader(input));
+		String line;
+		BufferedWriter bw = new BufferedWriter(new FileWriter(output));
+		while((line = br.readLine()) != null){
+			Point p = new Point(line);
+			bw.write(p.cutThreshold(threshold)+"\n");
+		}
+		
+		br.close();
+		bw.close();
+		
+		
 	}
 	
 }
