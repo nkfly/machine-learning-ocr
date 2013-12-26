@@ -4,11 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-import weka.attributeSelection.PrincipalComponents;
-import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.core.converters.LibSVMLoader;
-import weka.core.converters.LibSVMSaver;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 
@@ -23,6 +20,7 @@ public class SMO {
 		NumericToNominal filter = new NumericToNominal();
         filter.setInputFormat(data);
         data = Filter.useFilter(data, filter);
+        
 		
 		smo = new weka.classifiers.functions.SMO();
 		smo.buildClassifier(data);
@@ -36,12 +34,17 @@ public class SMO {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(testFile));
 		Instances test = libsvmLoader.getDataSet();
+		
+		NumericToNominal filter = new NumericToNominal();
+        filter.setInputFormat(test);
+        test = Filter.useFilter(test, filter);
 
 		BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
 
 		for (int i = 0; i < test.numInstances(); i++) {
 			double pred = smo.classifyInstance(test.instance(i));
-			bw.write(test.classAttribute().value((int) pred)+"\n");
+			bw.write(data.classAttribute().value((int)pred)+"\n");
+
 		}
 
 		bw.close();
