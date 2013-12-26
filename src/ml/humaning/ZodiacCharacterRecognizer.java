@@ -9,6 +9,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
 import ml.humaning.algorithm.ANN;
+import ml.humaning.algorithm.SMO;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
 
@@ -34,6 +35,8 @@ public class ZodiacCharacterRecognizer {
 				runKNN(line);
 			} else if("ann".equals(algorithm)) {
 				runANN(line);
+			} else if("smo".equals(algorithm)) {
+				runSMO(line);
 			}
 
 		} catch (ParseException e) {
@@ -69,12 +72,24 @@ public class ZodiacCharacterRecognizer {
 
 		SVM svm = new SVM(line.getOptionValue("train-file"));
 		svm.parallelCrossValidationSVM(0, 1);
-		//svm.wekaLibSVM(line.getOptionValue("train-file"), line.getOptionValue("test-file"), line.getOptionValue("output"));
-//		for(double nu = 0.000005; nu <= 50;nu  *= 10){
-//			for(double gamma = 0.00001; gamma < 0.0001;gamma += 0.00001){
-//				svm.train(true, 1, 2, -1, gamma, -1, -1, nu, -1);
-//			}
-//		}
+		
+	}
+
+	public static void runSMO(CommandLine line) throws Exception {
+		if (!line.hasOption("train-file") ||
+				!line.hasOption("test-file") ||
+				!line.hasOption("output")) {
+
+			printUsage();
+			return;
+		}
+		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
+		SMO smo = new SMO();
+		String testFilePath = line.getOptionValue("test-file");
+		String outputFilePath = line.getOptionValue("output");
+		smo.train(line.getOptionValue("train-file"));
+		smo.predict(testFilePath, outputFilePath);
+
 	}
 	
 	public static void runANN(CommandLine line) throws Exception {
@@ -92,7 +107,6 @@ public class ZodiacCharacterRecognizer {
 		ann.train(line.getOptionValue("train-file"));
 		ann.predict(testFilePath, outputFilePath);
 
-		//knn.predict(15, testFilePath, outputFilePath);
 	}
 
 	public static void runKNN(CommandLine line) throws Exception {
