@@ -8,6 +8,7 @@ import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.core.converters.LibSVMLoader;
+import weka.core.converters.LibSVMSaver;
 
 public class ANN {
 	private Instances data;
@@ -24,6 +25,11 @@ public class ANN {
 		PrincipalComponents pca = new PrincipalComponents();
 		pca.buildEvaluator(data);
 		data = pca.transformedData(data);
+		
+		LibSVMSaver libsvmSaver = new LibSVMSaver();
+		libsvmSaver.setInstances(data);
+		libsvmSaver.setFile(new File("pca.dat"));
+		libsvmSaver.writeBatch();
 
 		multilayerPerceptron = new MultilayerPerceptron();
 		multilayerPerceptron.setTrainingTime(100);
