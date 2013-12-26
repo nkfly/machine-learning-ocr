@@ -26,7 +26,7 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
-			SVD svd = new SVD(12800, argv[0]);
+			SVD svd = new SVD(12810, argv[0]);
 			svd.decompose(300, argv[1]);
 
 			CommandLine line = parser.parse(options, argv);

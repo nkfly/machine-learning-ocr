@@ -1,5 +1,5 @@
 CLASSPATH := bin:src
-CLASSPATH := $(CLASSPATH):libs/commons-cli-1.2/commons-cli-1.2.jar:libs/weka.jar:libs/libsvm.jar
+CLASSPATH := $(CLASSPATH):libs/commons-cli-1.2/commons-cli-1.2.jar:libs/weka.jar:libs/libsvm.jar:libs/lingpipe-4.1.0.jar
 
 ALGORITHM = ann
 
