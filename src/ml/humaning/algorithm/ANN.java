@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+import weka.attributeSelection.PrincipalComponents;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.core.Instances;
 import weka.core.converters.LibSVMLoader;
@@ -19,8 +20,13 @@ public class ANN {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(trainFile));
 		data = libsvmLoader.getDataSet();
+		
+		PrincipalComponents pca = new PrincipalComponents();
+		pca.buildEvaluator(data);
+		data = pca.transformedData(data);
 
 		multilayerPerceptron = new MultilayerPerceptron();
+		multilayerPerceptron.setTrainingTime(100);
 		multilayerPerceptron.buildClassifier(data);
 		
 		
