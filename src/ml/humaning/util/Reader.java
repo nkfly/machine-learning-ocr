@@ -1,27 +1,23 @@
 package ml.humaning.util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import weka.core.Instances;
+import weka.core.converters.LibSVMLoader;
+
+import ml.humaning.util.Logger;
 
 public class Reader {
 
-	public static Point [] readPoints(String fileName) throws IOException{
-		BufferedReader reader = new BufferedReader(new FileReader(fileName));
-		String line;
+	public static Instances readData(String fileName) throws IOException {
+		Logger.log("Read data from file " + fileName + "...");
 
-		ArrayList <Point> tempList = new ArrayList<Point>();
-		while((line = reader.readLine()) != null){
-			tempList.add(new Point(line));
-		}
+		LibSVMLoader libsvmLoader = new LibSVMLoader();
+		libsvmLoader.setSource(new File(fileName));
+		Instances data = libsvmLoader.getDataSet();
 
-		Point [] data = new Point[tempList.size()];
-		data = tempList.toArray(data);
+		Logger.log("Done");
 
-		reader.close();
 		return data;
-
 	}
-
 }

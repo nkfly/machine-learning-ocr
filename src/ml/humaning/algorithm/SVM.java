@@ -22,9 +22,8 @@ public class SVM {
 	private String trainFile;
 	private Executor pool;
 	public SVM(String trainFile) throws IOException{
-		allData = Reader.readPoints(trainFile);
+		/* allData = Reader.readPoints(trainFile); */
 		this.trainFile = trainFile;
-
 	}
 
 	public void predict(int svmType, int kernelType, String testFile, String outputFile) throws IOException, InterruptedException{
@@ -118,9 +117,9 @@ public class SVM {
 		mask4Reader.close();
 
 	}
-	
-	
-	
+
+
+
 	private String processTrainCommand(int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon){
 		String commandString =  "";
 		if(svmType == 0){// C-SVC
@@ -162,17 +161,17 @@ public class SVM {
 			commandString +="-r ";// coef0
 			commandString +=String.valueOf(coef)+" ";
 		}
-		
-		commandString += ("-s " + svmType + " -t "+ kernelType + " "); 
-		
+
+		commandString += ("-s " + svmType + " -t "+ kernelType + " ");
+
 		return commandString;
 
-		
-		
+
+
 	}
-	
+
 	private class Trainer implements Runnable{
-		
+
 		private SVM svm;
 		private String command;
 		private String accuracyRecord;
@@ -180,12 +179,12 @@ public class SVM {
 			this.svm = svm;
 			this.command = command;
 			this.accuracyRecord = ar;
-			
+
 		}
 
 		@Override
 		public void run() {
-	
+
 				Svm_train trainer = new Svm_train();
 				try {
 					double accuracy = trainer.run(command.split("\\s+"));
@@ -193,15 +192,15 @@ public class SVM {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}				
-				
+				}
 
-			
+
+
 		}
-		
-		
+
+
 	}
-	
+
 	public synchronized void updateAccuracyRecord(String accuracyRecordPath, double accuracy, String command) throws IOException{
 		File accuracyRecord = new File(accuracyRecordPath);
         if(accuracyRecord.exists()) {
@@ -222,15 +221,15 @@ public class SVM {
                 accuracyWriter.write(command+"\n");
                 accuracyWriter.close();
         }
-		
+
 	}
-	
+
 	public void parallelCrossValidationSVM(int svmType, int kernelType) throws IOException, InterruptedException{
-		
+
 		String configurationFile = "svm"+svmType+"_kernel"+kernelType;
 		int threadNumber = 13;
 		pool = Executors.newFixedThreadPool(threadNumber);
-		
+
 		for(double c = 1.0 ;c <= 100000.0; c *= 10){
 			for(int p = 3; p <= 10;p += 1){
 				for(double gamma = 0.0001;gamma <= 0.001;gamma += 0.0001){
@@ -238,7 +237,7 @@ public class SVM {
 		            pool.execute(new Trainer(this, commandString+" -v 5 "+trainFile, configurationFile+".record"));
 				}
 			}
-		}				
+		}
 	}
 
 	public void train(int svmType, int kernelType, int degree, double gamma, double coef, double cost , double nu, double epsilon) throws IOException, InterruptedException{
@@ -252,7 +251,7 @@ public class SVM {
 				p.setMaskRegion(maskRegion);
 				trainFileWriter.write(p.toLIBSVMString()+"\n");
 			}
-			command.call(commandString+maskTrainFile);			
+			command.call(commandString+maskTrainFile);
 			trainFileWriter.close();
 		}
 	}

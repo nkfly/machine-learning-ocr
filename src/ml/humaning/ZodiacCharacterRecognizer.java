@@ -8,12 +8,19 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
+import weka.core.Instances;
+
 import ml.humaning.algorithm.ANN;
 import ml.humaning.algorithm.SMO;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
+
+import ml.humaning.preprocessor.Resampler;
+
 import ml.humaning.util.Preprocess;
-import ml.humaning.util.SVD;
+import ml.humaning.util.Reader;
+import ml.humaning.util.CommandLineHelper;
+
 
 public class ZodiacCharacterRecognizer {
 	static Options options;
@@ -22,13 +29,8 @@ public class ZodiacCharacterRecognizer {
 		prepareOptions();
 
 		CommandLineParser parser = new GnuParser();
-		
-
 
 		try {
-			SVD svd = new SVD(12810, argv[0]);
-			svd.decompose(300, argv[1]);
-
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
 				printUsage();
@@ -44,6 +46,8 @@ public class ZodiacCharacterRecognizer {
 				runANN(line);
 			} else if("smo".equals(algorithm)) {
 				runSMO(line);
+			} else if("resample".equals(algorithm)) {
+				runResample(line);
 			}
 
 		} catch (ParseException e) {
@@ -54,21 +58,24 @@ public class ZodiacCharacterRecognizer {
 	}
 
 	public static void prepareOptions() {
+		options = new Options();
+
 		Option algorithm = new Option("a", "algorithm", true, "algorithm");
 		Option trainFile = new Option("tr", "train-file", true, "train file");
 		Option testFile = new Option("te", "test-file", true, "test file");
 		Option output = new Option("o", "output", true, "output file");
 
-		options = new Options();
 		options.addOption(algorithm);
 		options.addOption(trainFile);
 		options.addOption(testFile);
 		options.addOption(output);
+
+		(new KNN()).registerOptions(options);
+		(new Resampler()).registerOptions(options);
 	}
 
 	public static void printUsage() {
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("ZodiacCharacterRecognizer", options);
+		CommandLineHelper.printUsage(options);
 	}
 
 	public static void runSVM(CommandLine line) throws Exception {
@@ -79,7 +86,7 @@ public class ZodiacCharacterRecognizer {
 
 		SVM svm = new SVM(line.getOptionValue("train-file"));
 		svm.parallelCrossValidationSVM(0, 1);
-		
+
 	}
 
 	public static void runSMO(CommandLine line) throws Exception {
@@ -97,7 +104,7 @@ public class ZodiacCharacterRecognizer {
 		smo.predict(testFilePath, outputFilePath);
 
 	}
-	
+
 	public static void runANN(CommandLine line) throws Exception {
 		if (!line.hasOption("train-file") ||
 				!line.hasOption("test-file") ||
@@ -124,9 +131,26 @@ public class ZodiacCharacterRecognizer {
 			return;
 		}
 		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
-		KNN knn = new KNN(line.getOptionValue("train-file"));
-		String testFilePath = line.getOptionValue("test-file");
-		String outputFilePath = line.getOptionValue("output");
-		knn.predict(15, testFilePath, outputFilePath);
+		KNN knn = new KNN();
+		if(!knn.parseOptions(line)){
+			printUsage();
+			return;
+		}
+
+		Instances trainData = Reader.readData(line.getOptionValue("train-file"));
+		/* String testFilePath = line.getOptionValue("test-file"); */
+		/* String outputFilePath = line.getOptionValue("output"); */
+		knn.train(trainData);
+		knn.predict(trainData);
+	}
+
+	public static void runResample(CommandLine line) throws Exception {
+		Resampler resampler = new Resampler();
+		if (!resampler.parseOptions(line)) {
+			printUsage();
+			return;
+		}
+
+		resampler.run();
 	}
 }

@@ -13,18 +13,18 @@ public class SVD {
 	public SVD(int numberOfAttributes, String trainFile) throws IOException{
 		allData = Reader.readPoints(trainFile);
 		matrix = new double[numberOfAttributes][allData.length];
-		
+
 		for(int i = 0;i < allData.length;i++){
 			Dimension [] dimensionArray = allData[i].getDimensionArray();
 			for(Dimension d : dimensionArray){
-				matrix[d.getDimension()-1][i] = d.getValue();// 1-based dimension 
+				matrix[d.getDimension()-1][i] = d.getValue();// 1-based dimension
 			}
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	public void decompose(int reduceDimension, String outputFile) throws IOException{
 	    double featureInit = 0.01;
 	    double initialLearningRate = 0.005;
@@ -50,13 +50,11 @@ public class SVD {
 	    for(int i = 0;i < instanceVectors.length;i++){
 	    	String reducedInstance = allData[i].getZodiac()+ " ";
 	    	for(int j = 0;j < instanceVectors[i].length;j++){
-	    		reducedInstance += (j+1) + ":" + instanceVectors[i][j] + " "; 
+	    		reducedInstance += (j+1) + ":" + instanceVectors[i][j] + " ";
 	    	}
 	    	bw.write(reducedInstance.trim()+"\n");
 	    }
 	    bw.close();
-	    
+
 	}
-	
-	
 }

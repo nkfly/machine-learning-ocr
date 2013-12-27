@@ -16,17 +16,17 @@ public class SMO {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(trainFile));
 		data = libsvmLoader.getDataSet();
-		
+
 		NumericToNominal filter = new NumericToNominal();
         filter.setInputFormat(data);
         data = Filter.useFilter(data, filter);
-        
-		
+
+
 		smo = new weka.classifiers.functions.SMO();
 		smo.buildClassifier(data);
 
-		
-		
+
+
 
 	}
 
@@ -34,7 +34,7 @@ public class SMO {
 		LibSVMLoader libsvmLoader = new LibSVMLoader();
 		libsvmLoader.setSource(new File(testFile));
 		Instances test = libsvmLoader.getDataSet();
-		
+
 		NumericToNominal filter = new NumericToNominal();
         filter.setInputFormat(test);
         test = Filter.useFilter(test, filter);
