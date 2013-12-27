@@ -32,7 +32,7 @@ runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
 		-k 15\
-		-tr $(RESAMPLED_FILE)\
+		-tr $(TRAIN_FILE)\
 		-te $(TEST_FILE)\
 		-o $(OUTPUT)
 

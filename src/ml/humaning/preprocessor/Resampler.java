@@ -8,6 +8,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.Option;
 
 import weka.core.Instances;
+import weka.core.Instance;
 
 import ml.humaning.util.OptionsHandler;
 import ml.humaning.util.Logger;
@@ -57,13 +58,13 @@ public class Resampler implements OptionsHandler {
 		Logger.log("Resampling...");
 
 		Instances sampled = new Instances(data, 0, numberOfSample);
-		sampled.randomize(new Random());
+		sampled.randomize(new Random(System.currentTimeMillis()));
 
 		Logger.log("Done");
 		return sampled;
 	}
 
-	public void run() throws IOException {
+	public void run() throws Exception {
 		Instances data = Reader.readData(inputFilePath);
 		data = resample(data);
 		Writer.writeData(data, outputFilePath);

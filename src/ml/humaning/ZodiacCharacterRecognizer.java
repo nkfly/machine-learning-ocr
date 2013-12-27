@@ -84,9 +84,8 @@ public class ZodiacCharacterRecognizer {
 			return;
 		}
 
-		SVM svm = new SVM(line.getOptionValue("train-file"));
-		svm.parallelCrossValidationSVM(0, 1);
-
+		/* SVM svm = new SVM(line.getOptionValue("train-file")); */
+		/* svm.parallelCrossValidationSVM(0, 1); */
 	}
 
 	public static void runSMO(CommandLine line) throws Exception {

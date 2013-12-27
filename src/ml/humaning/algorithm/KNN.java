@@ -1,14 +1,10 @@
 package ml.humaning.algorithm;
 
-import java.lang.Exception;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -17,10 +13,12 @@ import org.apache.commons.cli.Option;
 import weka.core.Instances;
 import weka.core.Instance;
 
-import ml.humaning.util.Point;
 import ml.humaning.util.Reader;
 import ml.humaning.util.CommandLineHelper;
 import ml.humaning.util.OptionsHandler;
+import ml.humaning.util.InstancesHelper;
+import ml.humaning.data.Point;
+import ml.humaning.data.comparator.CosineDistanceComparator;
 
 import ml.humaning.util.Logger;
 
@@ -62,20 +60,68 @@ public class KNN implements OptionsHandler {
 	}
 
 	// ----- Predict -----
-	public Instances predict(Instances data) {
+	public ArrayList<Integer> predict(Instances data) {
 		Logger.log("Start KNN predict...");
+		ArrayList<Integer> results = new ArrayList<Integer>();
 
-		System.out.println("test");
+		int total = data.numInstances();
+		int count = 0;
+		int current = 0;
 
 		for (Instance point: data) {
-			System.out.println(point);
+			Logger.log("progress: " + current + "/" + total + "....");
+			int result = predict(point);
+
+			if (result == new Point(point).getZodiac()) count++;
+
+			results.add(result);
+			current++;
+
+			Logger.log("count =  " + count);
+			Logger.log("performance: " + (double)count/current);
 		}
 
 		Logger.log("Done");
-		return null;
+		return results;
 	}
 
+	public int predict(Instance inst) {
+		int result = 0;
+
+		ArrayList<Point> array = InstancesHelper.toPointArray(trainData);
+		Collections.sort(array, new CosineDistanceComparator(new Point(inst)));
+
+		Logger.log("real = " + new Point(inst).getZodiac());
+		result = getMass(array, k);
+		/* inst.setClassValue((double)result); */
+		Logger.log("predict = " + result);
+
+		return result;
+	}
+
+
 	// ----- Private Methods -----
+	private int getMass(ArrayList<Point> array, int k) {
+		int [] counter = new int[13];
+		int max = 0;
+		int result = -1;
+
+		for (int i = 1; i <= k; i++) {
+			int zodiac = array.get(i).getZodiac();
+			counter[zodiac]++;
+		}
+
+		for (int i = 1; i <= 12; i++) {
+			int vote = counter[i];
+			if (vote > max) {
+				max = vote;
+				result = i;
+			}
+		}
+
+		return result;
+	}
+
 /* 	private HashSet <Integer> getValidationPoints(int numberOfValidationPoints) { */
 /* 		HashSet<Integer> validationPoints = new HashSet<Integer>(); */
 /* 		Random generator = new Random(System.currentTimeMillis()); */
@@ -86,52 +132,52 @@ public class KNN implements OptionsHandler {
 /* 		return validationPoints; */
 /* 	} */
 /*  */
-/* 	private int classify(Point [] trainData, int k) { */
-/* 		HashMap <Integer, Integer> zodiacToFrequency = new HashMap <Integer, Integer>(); */
-/*  */
-/* 		for(int i = 0;i < trainData.length && i < k;i++){ */
-/* 			if(zodiacToFrequency.get(trainData[i].getZodiac() ) == null){ */
-/* 				zodiacToFrequency.put(trainData[i].getZodiac(), 1); */
-/* 			}else { */
-/* 				zodiacToFrequency.put(trainData[i].getZodiac(), zodiacToFrequency.get(trainData[i].getZodiac())+1); */
-/* 			} */
-/* 		} */
-/*  */
-/* 		int maxFrequency = 0; */
-/* 		int maxZodiac = 0; */
-/*  */
-/* 		for(Integer zodiac : zodiacToFrequency.keySet()){ */
-/* 			if(zodiacToFrequency.get(zodiac) > maxFrequency){ */
-/* 				maxFrequency = zodiacToFrequency.get(zodiac); */
-/* 				maxZodiac = zodiac; */
-/*  */
-/* 			} */
-/* 		} */
-/*  */
-/* 		return maxZodiac; */
-/* 	} */
-/*  */
-/* 	public double getCVError(int k, int numberOfFold){ */
-/* 		if(numberOfFold < 2)return 0.0; */
-/* 		double crossValidationError = 0.0; */
-/* 		for(int i = 1;i <= numberOfFold;i++){ */
-/* 			crossValidationError += getValidationError(k, numberOfFold, i); */
-/* 		} */
-/* 		return crossValidationError/numberOfFold; */
-/* 	} */
-/*  */
-	public void predict(int k, String testFile, String outputFile) throws IOException {
-		for(Point testP : testData){
-			int emptyRegion = testP.getEmptyRegion();
-			testP.setMaskRegion(emptyRegion);
-			for(int trainIndex = 0; trainIndex < allData.length;trainIndex++){
-				allData[trainIndex].setMaskRegion(emptyRegion);
-				allData[trainIndex].setDistanceToReference(-1*testP.cosineSimilarity(allData[trainIndex]));
-			}
-			Arrays.sort(allData);
-			writer.write(classify(allData, k)+"\n");
-		}
-	}
+	/* private int classify(Point [] trainData, int k) { */
+	/* 	HashMap <Integer, Integer> zodiacToFrequency = new HashMap <Integer, Integer>(); */
+
+	/* 	for(int i = 0;i < trainData.length && i < k;i++){ */
+	/* 		if(zodiacToFrequency.get(trainData[i].getZodiac() ) == null){ */
+	/* 			zodiacToFrequency.put(trainData[i].getZodiac(), 1); */
+	/* 		}else { */
+	/* 			zodiacToFrequency.put(trainData[i].getZodiac(), zodiacToFrequency.get(trainData[i].getZodiac())+1); */
+	/* 		} */
+	/* 	} */
+
+	/* 	int maxFrequency = 0; */
+	/* 	int maxZodiac = 0; */
+
+	/* 	for(Integer zodiac : zodiacToFrequency.keySet()){ */
+	/* 		if(zodiacToFrequency.get(zodiac) > maxFrequency){ */
+	/* 			maxFrequency = zodiacToFrequency.get(zodiac); */
+	/* 			maxZodiac = zodiac; */
+
+	/* 		} */
+	/* 	} */
+
+	/* 	return maxZodiac; */
+	/* } */
+
+	/* public double getCVError(int k, int numberOfFold){ */
+	/* 	if(numberOfFold < 2)return 0.0; */
+	/* 	double crossValidationError = 0.0; */
+	/* 	for(int i = 1;i <= numberOfFold;i++){ */
+	/* 		crossValidationError += getValidationError(k, numberOfFold, i); */
+	/* 	} */
+	/* 	return crossValidationError/numberOfFold; */
+	/* } */
+
+	/* public void predict(int k, String testFile, String outputFile) throws IOException { */
+	/* 	for(Point testP : testData){ */
+	/* 		int emptyRegion = testP.getEmptyRegion(); */
+	/* 		testP.setMaskRegion(emptyRegion); */
+	/* 		for(int trainIndex = 0; trainIndex < allData.length;trainIndex++){ */
+	/* 			allData[trainIndex].setMaskRegion(emptyRegion); */
+	/* 			allData[trainIndex].setDistanceToReference(-1*testP.cosineSimilarity(allData[trainIndex])); */
+	/* 		} */
+	/* 		Arrays.sort(allData); */
+	/* 		writer.write(classify(allData, k)+"\n"); */
+	/* 	} */
+	/* } */
 /*  */
 /* 	// fold is 1-based, [1, numberOfFold] */
 /* 	private double getValidationError(int k, int numberOfFold, int fold){ */
