@@ -16,6 +16,7 @@ import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
 
 import ml.humaning.preprocessor.Resampler;
+import ml.humaning.preprocessor.AverageFiller;
 
 import ml.humaning.util.Preprocess;
 import ml.humaning.util.Reader;
@@ -48,6 +49,8 @@ public class ZodiacCharacterRecognizer {
 				runSMO(line);
 			} else if("resample".equals(algorithm)) {
 				runResample(line);
+			} else if("fill".equals(algorithm)) {
+				runFillAverage(line);
 			}
 
 		} catch (ParseException e) {
@@ -72,6 +75,7 @@ public class ZodiacCharacterRecognizer {
 
 		(new KNN()).registerOptions(options);
 		(new Resampler()).registerOptions(options);
+		(new AverageFiller()).registerOptions(options);
 	}
 
 	public static void printUsage() {
@@ -137,10 +141,10 @@ public class ZodiacCharacterRecognizer {
 		}
 
 		Instances trainData = Reader.readData(line.getOptionValue("train-file"));
-		/* String testFilePath = line.getOptionValue("test-file"); */
+		Instances testData = Reader.readData(line.getOptionValue("test-file"));
 		/* String outputFilePath = line.getOptionValue("output"); */
 		knn.train(trainData);
-		knn.predict(trainData);
+		knn.predict(testData);
 	}
 
 	public static void runResample(CommandLine line) throws Exception {
@@ -151,5 +155,15 @@ public class ZodiacCharacterRecognizer {
 		}
 
 		resampler.run();
+	}
+
+	public static void runFillAverage(CommandLine line) throws Exception {
+		AverageFiller filler = new AverageFiller();
+		if (!filler.parseOptions(line)) {
+			printUsage();
+			return;
+		}
+
+		filler.run();
 	}
 }

@@ -18,9 +18,11 @@ public class Point {
 	/* private int maskRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area */
 
 	private Instance inst;
+	private int emptyRegion;
 
 	public Point(Instance inst) {
 		this.inst = inst;
+		this.emptyRegion = getEmptyRegion();
 	}
 
 	// ----- Getter and Setter -----
@@ -40,6 +42,21 @@ public class Point {
 		double square = 0.0;
 
 		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HIGHT; i++) {
+			if (toRegion(i) == emptyRegion) continue;
+
+			double value = this.value(i);
+			square += value * value;
+		}
+
+		return Math.sqrt(square);
+	}
+
+	public double lengthWithoutRegion(int region) {
+		double square = 0.0;
+
+		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HIGHT; i++) {
+			if (toRegion(i) == region) continue;
+
 			double value = this.value(i);
 			square += value * value;
 		}
@@ -51,20 +68,35 @@ public class Point {
 		double product = 0.0;
 
 		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HIGHT; i++) {
+			if (toRegion(i) == emptyRegion) continue;
+
 			product += this.value(i) * p.value(i);
 		}
 
 		return product;
 	}
 
-	public double cosineSimilarity(Point p){
+	public double cosineSimilarity(Point p) {
 		double l = this.length();
-		double pl = p.length();
+		double pl = p.lengthWithoutRegion(this.emptyRegion);
 		if (l != 0.0 && pl != 0.0) return this.innerProduct(p)/(l*pl);
 		return 0.0;
 	}
 
 	// ----- Region Related -----
+
+	/*
+	 *  -------------------
+	 *  |        |        |
+	 *  |   1    |   2    |
+	 *  |        |        |
+	 *  -------------------
+	 *  |        |        |
+	 *  |   3    |   4    |
+	 *  |        |        |
+	 *  -------------------
+	 */
+
 	/* public void setMaskRegion(int r){ */
 	/* 	maskRegion = r; */
 	/* } */
@@ -72,61 +104,46 @@ public class Point {
 	/* 	return dimensionArray; */
 	/* } */
 
+	public static int toRegion(int r, int c) {
+		int u = r / (Point.IMAGE_HIGHT/2);
+		int v = c / (Point.IMAGE_WIDTH/2);
+		if (u > 1) u = 1;
+		if (v > 1) v = 1;
 
-	/*
-	 * get the empty region
-	 *  --------------------
-	 *  |        |         |
-	 *  |   1    |    2    |
-	 *  |        |         |
-	 *  --------------------
-	 *  |        |         |
-	 *  |   3    |    4    |
-	 *  |        |         |
-	 *  --------------------
-	 */
-
-	public int getRegion(int pixel){
-		int row = (pixel-1) / 105;
-		int col = (pixel-1) % 105;
-
-		if (row<105/2) { //UP
-			if(col<105/2){
-				return 1;
-			}else{
-				return 2;
-			}
-		} else {   //Down
-			if (col < 105/2) {
-				return 3;
-			} else {
-				return 4;
-			}
-		}
-
+		return u * 2 + v + 1;
 	}
+
+	public int toRegion(int index){
+		int row = index / Point.IMAGE_WIDTH;
+		int col = index % Point.IMAGE_WIDTH;
+
+		return toRegion(row, col);
+	}
+
+	public static int toIndex(int r, int c) {
+		return r * Point.IMAGE_WIDTH + c;
+	}
+
 	public int getEmptyRegion(){
 
-		int[] region = new int[4];
-/*  */
-/* 		for (int x= 0; x< dimensionArray.length; x++){ */
-/*  */
-/* 			int pixel = dimensionArray[x].getDimension(); */
-/* 			region[getRegion(pixel)-1] += 1; */
-/*  */
-/* 		} */
+		double [] regions = new double[4];
 
-		int mini = region[0];
+		for (int i = 0; i < Point.IMAGE_WIDTH * Point.IMAGE_HIGHT; i++) {
+			int idx = toRegion(i);
+			regions[idx - 1] += inst.value(i);
+		}
+
+		double mini = regions[0];
 		int idx  = 0;
 
-		for(int x = 1; x < region.length; x++){
-			if( mini > region[x] ) {
-				mini = region[x];
+		for(int x = 1; x < regions.length; x++){
+			if( mini > regions[x] ) {
+				mini = regions[x];
 				idx  = x;
 		    }
 		}
 
-		return idx+1;
+		return idx + 1;
 	}
 
 	/* public double distance(Point p, boolean isNormalized){ */

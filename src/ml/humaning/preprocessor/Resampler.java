@@ -54,7 +54,7 @@ public class Resampler implements OptionsHandler {
 		return success;
 	}
 
-	public Instances resample(Instances data){
+	public Instances resample(Instances data) {
 		Logger.log("Resampling...");
 
 		Instances sampled = new Instances(data, 0, numberOfSample);

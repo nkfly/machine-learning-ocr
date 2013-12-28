@@ -6,6 +6,7 @@ ALGORITHM = ann
 # files
 TRAIN_FILE = ./data/ml2013final_train.dat
 RESAMPLED_FILE = ./data/resampled.dat
+FILLED_FILE = ./data/filled.dat
 TEST_FILE = ./data/ml2013final_test1.nolabel.dat
 OUTPUT = ./data/output.dat
 
@@ -32,8 +33,8 @@ runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
 		-k 15\
-		-tr $(TRAIN_FILE)\
-		-te $(TEST_FILE)\
+		-tr $(FILLED_FILE)\
+		-te $(TRAIN_FILE)\
 		-o $(OUTPUT)
 
 resample: build
@@ -42,6 +43,12 @@ resample: build
 		-i $(TRAIN_FILE)\
 		-o $(RESAMPLED_FILE)\
 		-rspn 200
+
+fill: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a fill\
+		-i $(TRAIN_FILE)\
+		-o $(FILLED_FILE)
 
 clean:
 	rm -rf bin/*
