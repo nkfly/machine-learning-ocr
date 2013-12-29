@@ -32,7 +32,7 @@ runSVM:
 runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
-		-k 15\
+		-k 10\
 		-tr $(FILLED_FILE)\
 		-te $(TRAIN_FILE)\
 		-o $(OUTPUT)

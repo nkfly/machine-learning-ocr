@@ -91,8 +91,9 @@ public class KNN implements OptionsHandler {
 		ArrayList<Point> array = InstancesHelper.toPointArray(trainData);
 		Collections.sort(array, new CosineDistanceComparator(new Point(inst)));
 
-		Logger.log("real = " + new Point(inst).getZodiac());
-		result = getMass(array, k);
+		Point targetPoint = new Point(inst);
+		Logger.log("real = " + targetPoint.getZodiac());
+		result = getMass(array, targetPoint, k);
 		/* inst.setClassValue((double)result); */
 		Logger.log("predict = " + result);
 
@@ -101,18 +102,19 @@ public class KNN implements OptionsHandler {
 
 
 	// ----- Private Methods -----
-	private int getMass(ArrayList<Point> array, int k) {
-		int [] counter = new int[13];
-		int max = 0;
+	private int getMass(ArrayList<Point> array, Point targetPoint, int k) {
+		double [] counter = new double[13];
+		double max = 0;
 		int result = -1;
 
 		for (int i = 1; i <= k; i++) {
-			int zodiac = array.get(i).getZodiac();
-			counter[zodiac]++;
+			Point point = array.get(i);
+			int zodiac = point.getZodiac();
+			counter[zodiac] += targetPoint.cosineSimilarity(point);
 		}
 
 		for (int i = 1; i <= 12; i++) {
-			int vote = counter[i];
+			double vote = counter[i];
 			if (vote > max) {
 				max = vote;
 				result = i;
