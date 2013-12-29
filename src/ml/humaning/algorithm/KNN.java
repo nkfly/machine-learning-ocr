@@ -1,48 +1,39 @@
 package ml.humaning.algorithm;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.Option;
 
 import weka.core.Instances;
 import weka.core.Instance;
 
-import ml.humaning.util.Reader;
-import ml.humaning.util.CommandLineHelper;
-import ml.humaning.util.OptionsHandler;
 import ml.humaning.util.InstancesHelper;
 import ml.humaning.data.Point;
 import ml.humaning.data.comparator.CosineDistanceComparator;
 
 import ml.humaning.util.Logger;
 
-public class KNN implements OptionsHandler {
+public class KNN extends Algorithm {
 
-	private Instances trainData;
 	private int k;
 
 	// ----- Getter and Setter -----
-	public void setTrainData(Instances trainData) {
-		this.trainData = trainData;
-	}
-
 	public void setK(int k) {
 		this.k = k;
 	}
 
 	// ----- commandline options -----
-	public void registerOptions(Options options) {
+	public void registerOptions() {
+		super.registerOptions();
+
 		Option k = new Option("k", true, "the k of KNN");
 		options.addOption(k);
 	}
 
-	public boolean parseOptions(CommandLine line) {
+	public boolean parseArgv(String [] argv) throws Exception {
+		if (!super.parseArgv(argv)) return false;
+
 		if (!line.hasOption("k")) {
 			Logger.log("Missing options: k");
 			return false;
@@ -56,7 +47,6 @@ public class KNN implements OptionsHandler {
 	// ----- Train -----
 	public void train(Instances data) {
 		// yup, there is no trainning process in KNN
-		this.setTrainData(data);
 	}
 
 	// ----- Predict -----

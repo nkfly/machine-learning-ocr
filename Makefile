@@ -33,8 +33,8 @@ runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
 		-k 10\
-		-tr $(FILLED_FILE)\
-		-te $(TRAIN_FILE)\
+		-tr $(RESAMPLED_FILE)\
+		-te $(RESAMPLED_FILE)\
 		-o $(OUTPUT)
 
 resample: build
