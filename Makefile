@@ -37,6 +37,13 @@ runKNN: build
 		-te $(RESAMPLED_FILE)\
 		-o $(OUTPUT)
 
+runLinearSVM: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a linear-svm\
+		-tr $(RESAMPLED_FILE)\
+		-te $(RESAMPLED_FILE)\
+		-o $(OUTPUT)
+
 resample: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a resample\
