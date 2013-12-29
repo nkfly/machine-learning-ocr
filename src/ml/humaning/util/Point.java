@@ -15,7 +15,7 @@ public class Point implements Comparable <Point>{
 	public float [][] getFloatArray(){
 		float [][] floatArray = new float[Point.width][Point.height];
 		for(Dimension d : dimensionArray){
-			floatArray[d.getDimension()%width][d.getDimension()/width] = (float)d.getValue();
+			floatArray[(d.getDimension()-1)%width][(d.getDimension()-1)/width] = (float)d.getValue();
 		}
 		return floatArray;
 	}

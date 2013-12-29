@@ -28,9 +28,10 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
-//			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
-//			ife.analyze(4);
-//			ife.savePoint(4, "image.tif");
+			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
+			//ife.extractFeature("featureSelection.txt");
+			ife.analyze(7);
+
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
 				printUsage();

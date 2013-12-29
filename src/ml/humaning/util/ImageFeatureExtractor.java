@@ -8,6 +8,8 @@ import ij.measure.ResultsTable;
 import ij.plugin.filter.Analyzer;
 import ij.process.FloatProcessor;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class ImageFeatureExtractor {
@@ -40,6 +42,44 @@ public class ImageFeatureExtractor {
 			analyzer.displayResults();
 		}
 
+	}
+	
+	public void extractFeature(String outputFile) throws IOException{
+		
+		
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
+		for(int i = 0;i < allData.length;i++){
+			
+			FloatProcessor fp = new FloatProcessor(allData[i].getFloatArray());
+			fp.invert();
+			ImagePlus imp = new ImagePlus("test.tif", fp);
+			int index = 1;
+			String record = allData[i].getZodiac() + " ";
+
+
+			
+			ResultsTable rt = new ResultsTable(); 
+			Analyzer analyzer = new Analyzer(imp, Measurements.INTEGRATED_DENSITY, rt);
+			analyzer.measure();
+			record += (index++)+":"+rt.getValue("RawIntDen", 0)+ " ";
+			
+			rt = new ResultsTable(); 
+			analyzer = new Analyzer(imp, Measurements.KURTOSIS, rt);
+			analyzer.measure();
+			record += (index++)+":"+rt.getValue("Kurt", 0)+ " ";
+			
+			
+			rt = new ResultsTable(); 
+			analyzer = new Analyzer(imp, Measurements.SKEWNESS, rt);
+			analyzer.measure();
+			record += (index++)+":"+rt.getValue("Skew", 0)+ " ";
+			
+			bw.write(record.trim()+"\n");
+			
+		}
+		bw.close();
+		
 	}
 		
 	public ImageFeatureExtractor(String trainFileInLibsvmFormat){
