@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 
+
 import ml.humaning.util.Point;
 import ml.humaning.util.Reader;
 
@@ -18,6 +19,16 @@ public class KNN {
 
 	public KNN(String trainFile) throws IOException {
 		allData = Reader.readPoints(trainFile);
+		BufferedWriter wr = new BufferedWriter(new FileWriter("train_binary.dat"));
+		for(int i = 0;i < allData.length;i++){
+			wr.write(allData[i].toBinaryString()+"\n");
+			
+		}
+		
+		wr.close();
+		allData = Reader.readPoints("train_binary.dat");
+		 
+		
 	}
 
 	private HashSet <Integer> getValidationPoints(int numberOfValidationPoints) {

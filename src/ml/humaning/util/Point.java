@@ -161,6 +161,16 @@ public class Point implements Comparable <Point>{
 		return libsvm.trim();
 	}
 	
+	public String toBinaryString(){
+		String libsvm = zodiac + " ";
+		for(Dimension d : dimensionArray){
+			if(getRegion(d.getDimension()) != maskRegion){
+				libsvm += d.getDimension()+":"+1+" ";
+			}
+		}
+		return libsvm.trim();
+	}
+	
 	
 	
 

@@ -9,6 +9,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
 import ml.humaning.algorithm.ANN;
+import ml.humaning.algorithm.NB;
 import ml.humaning.algorithm.SMO;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
@@ -26,9 +27,7 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
-			SVD svd = new SVD(12810, argv[0]);
-			svd.decompose(300, argv[1]);
-
+			
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
 				printUsage();
@@ -44,6 +43,8 @@ public class ZodiacCharacterRecognizer {
 				runANN(line);
 			} else if("smo".equals(algorithm)) {
 				runSMO(line);
+			} else if("nb".equals(algorithm)) {
+				runNB(line);
 			}
 
 		} catch (ParseException e) {
@@ -78,7 +79,11 @@ public class ZodiacCharacterRecognizer {
 		}
 
 		SVM svm = new SVM(line.getOptionValue("train-file"));
-		svm.parallelCrossValidationSVM(0, 1);
+		String testFilePath = line.getOptionValue("test-file");
+		String outputFilePath = line.getOptionValue("output");
+		svm.train(0, 1, 3, 0.0001, -1, 10, -1, -1);
+		svm.predict(0, 1, testFilePath, outputFilePath);
+		//svm.parallelCrossValidationSVM(0, 1);
 		
 	}
 
@@ -114,6 +119,23 @@ public class ZodiacCharacterRecognizer {
 		ann.predict(testFilePath, outputFilePath);
 
 	}
+	
+	public static void runNB(CommandLine line) throws Exception {
+		if (!line.hasOption("train-file") ||
+				!line.hasOption("test-file") ||
+				!line.hasOption("output")) {
+
+			printUsage();
+			return;
+		}
+		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
+		NB nb = new NB();
+		String testFilePath = line.getOptionValue("test-file");
+		String outputFilePath = line.getOptionValue("output");
+		nb.train(line.getOptionValue("train-file"));
+		nb.predict(testFilePath, outputFilePath);
+
+	}
 
 	public static void runKNN(CommandLine line) throws Exception {
 		if (!line.hasOption("train-file") ||
@@ -125,6 +147,7 @@ public class ZodiacCharacterRecognizer {
 		}
 		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
 		KNN knn = new KNN(line.getOptionValue("train-file"));
+//		System.out.println(knn.getCVError(15, 5));
 		String testFilePath = line.getOptionValue("test-file");
 		String outputFilePath = line.getOptionValue("output");
 		knn.predict(15, testFilePath, outputFilePath);
