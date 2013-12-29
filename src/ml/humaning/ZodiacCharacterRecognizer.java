@@ -79,11 +79,11 @@ public class ZodiacCharacterRecognizer {
 		}
 
 		SVM svm = new SVM(line.getOptionValue("train-file"));
-		String testFilePath = line.getOptionValue("test-file");
-		String outputFilePath = line.getOptionValue("output");
-		svm.train(0, 1, 3, 0.0001, -1, 10, -1, -1);
-		svm.predict(0, 1, testFilePath, outputFilePath);
-		//svm.parallelCrossValidationSVM(0, 1);
+//		String testFilePath = line.getOptionValue("test-file");
+//		String outputFilePath = line.getOptionValue("output");
+//		svm.train(0, 1, 3, 0.0001, -1, 10, -1, -1);
+//		svm.predict(0, 1, testFilePath, outputFilePath);
+		svm.parallelCrossValidationSVM(0, 1);
 		
 	}
 

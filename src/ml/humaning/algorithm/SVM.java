@@ -228,16 +228,15 @@ public class SVM {
 	public void parallelCrossValidationSVM(int svmType, int kernelType) throws IOException, InterruptedException{
 		
 		String configurationFile = "svm"+svmType+"_kernel"+kernelType;
-		int threadNumber = 13;
+		int threadNumber = 10;
 		pool = Executors.newFixedThreadPool(threadNumber);
 		
-		for(double c = 1.0 ;c <= 100000.0; c *= 10){
-			for(int p = 3; p <= 10;p += 1){
-				for(double gamma = 0.0001;gamma <= 0.001;gamma += 0.0001){
-					String commandString = processTrainCommand(svmType, kernelType, p, gamma, -1, c, -1, -1);
-		            pool.execute(new Trainer(this, commandString+" -v 5 "+trainFile, configurationFile+".record"));
-				}
+		for(double c = 5 ;c <= 15; c += 1){			
+			for(double gamma = 0.00015;gamma <= 0.00025;gamma += 0.00001){
+				String commandString = processTrainCommand(svmType, kernelType, 3, gamma, -1, c, -1, -1);
+		           pool.execute(new Trainer(this, commandString+" -v 5 "+trainFile, configurationFile+".record"));
 			}
+			
 		}				
 	}
 

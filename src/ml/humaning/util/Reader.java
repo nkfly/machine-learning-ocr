@@ -12,7 +12,7 @@ public class Reader {
 		String line;
 
 		ArrayList <Point> tempList = new ArrayList<Point>();
-		while((line = reader.readLine()) != null){
+		while((line = reader.readLine()) != null ){
 			tempList.add(new Point(line));
 		}
 
