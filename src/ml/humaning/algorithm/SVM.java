@@ -252,7 +252,7 @@ public class SVM {
 				p.setMaskRegion(maskRegion);
 				trainFileWriter.write(p.toLIBSVMString()+"\n");
 			}
-			command.call(commandString+maskTrainFile);			
+			command.call("svm-train "+commandString+maskTrainFile);			
 			trainFileWriter.close();
 		}
 	}
