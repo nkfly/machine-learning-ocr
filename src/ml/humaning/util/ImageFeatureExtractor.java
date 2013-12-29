@@ -13,6 +13,7 @@ public class ImageFeatureExtractor {
 	public void saveAllPoints(){
 		for(int i = 0;i < allData.length;i++){
 			FloatProcessor fp = new FloatProcessor(allData[i].getFloatArray());
+			fp.invert();
 			ImagePlus imp = new ImagePlus("test.tif", fp);
 			IJ.saveAs(imp, "tif", "image"+i+".tif");
 		}
@@ -23,10 +24,6 @@ public class ImageFeatureExtractor {
 	public ImageFeatureExtractor(String trainFileInLibsvmFormat){
 		try {
 			allData = Reader.readPoints(trainFileInLibsvmFormat);
-			FloatProcessor fp = new FloatProcessor(allData[2].getFloatArray());
-			fp.invert();
-			ImagePlus imp = new ImagePlus("test.tif", fp);
-			IJ.saveAs(imp, "tif", "image.tif");
 
 			
 		} catch (IOException e) {
@@ -36,6 +33,8 @@ public class ImageFeatureExtractor {
 		
 		
 	}
+	
+	
 	
 	
 		
