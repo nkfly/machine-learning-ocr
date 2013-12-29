@@ -231,8 +231,8 @@ public class SVM {
 		int threadNumber = 10;
 		pool = Executors.newFixedThreadPool(threadNumber);
 		
-		for(double c = 5 ;c <= 15; c += 1){			
-			for(double gamma = 0.00015;gamma <= 0.00025;gamma += 0.00001){
+		for(double c = 4.5 ;c <= 5.5; c += 0.1){			
+			for(double gamma = 0.000165;gamma <= 0.000175;gamma += 0.000001){
 				String commandString = processTrainCommand(svmType, kernelType, 3, gamma, -1, c, -1, -1);
 		           pool.execute(new Trainer(this, commandString+" -v 5 "+trainFile, configurationFile+".record"));
 			}

@@ -29,7 +29,7 @@ public class ZodiacCharacterRecognizer {
 
 		try {
 			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
-			
+			ife.analyze(4);
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
 				printUsage();
