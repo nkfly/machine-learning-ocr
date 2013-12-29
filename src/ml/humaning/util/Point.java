@@ -8,7 +8,17 @@ public class Point implements Comparable <Point>{
 	private int zodiac;
 	private Dimension [] dimensionArray;
 	private double distanceToReference = 0.0;
-	private int maskRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area 
+	private int maskRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area
+	public static final int width = 105;
+	public static final int height = 122;
+	
+	public float [][] getFloatArray(){
+		float [][] floatArray = new float[Point.width][Point.height];
+		for(Dimension d : dimensionArray){
+			floatArray[d.getDimension()%width][d.getDimension()/width] = (float)d.getValue();
+		}
+		return floatArray;
+	}
 
 	public Point(String record){
 		String [] tokens = record.split("\\s+");

@@ -13,6 +13,7 @@ import ml.humaning.algorithm.NB;
 import ml.humaning.algorithm.SMO;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
+import ml.humaning.util.ImageFeatureExtractor;
 import ml.humaning.util.Preprocess;
 import ml.humaning.util.SVD;
 
@@ -27,6 +28,7 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
+			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
 			
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
