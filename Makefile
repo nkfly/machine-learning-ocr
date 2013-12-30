@@ -1,5 +1,10 @@
 CLASSPATH := bin:src
-CLASSPATH := $(CLASSPATH):libs/commons-cli-1.2/commons-cli-1.2.jar:libs/weka.jar:libs/libsvm.jar:libs/lingpipe-4.1.0.jar
+CLASSPATH := $(CLASSPATH):libs/commons-cli-1.2/commons-cli-1.2.jar
+CLASSPATH := $(CLASSPATH):libs/weka.jar
+CLASSPATH := $(CLASSPATH):libs/libsvm.jar
+CLASSPATH := $(CLASSPATH):libs/lingpipe-4.1.0.jar
+CLASSPATH := $(CLASSPATH):libs/LibLINEAR.jar
+CLASSPATH := $(CLASSPATH):libs/liblinear-1.92.jar
 
 ALGORITHM = ann
 
@@ -40,6 +45,14 @@ runKNN: build
 runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a linear-svm\
+		-s 7\
+		-tr $(TRAIN_FILE)\
+		-te $(TRAIN_FILE)\
+		-o $(OUTPUT)
+
+runAdaBoost: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a adaboost\
 		-tr $(RESAMPLED_FILE)\
 		-te $(RESAMPLED_FILE)\
 		-o $(OUTPUT)

@@ -54,10 +54,10 @@ public abstract class Algorithm {
 		return true;
 	}
 
-	public abstract void train(Instances trainData);
-	public abstract ArrayList<Integer> predict(Instances testData);
+	public abstract void train(Instances trainData) throws Exception;
+	public abstract ArrayList<Integer> predict(Instances testData) throws Exception;
 
-	public void run() {
+	public void run() throws Exception {
 		this.train(trainData);
 		this.predict(testData);
 
