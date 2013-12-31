@@ -12,6 +12,7 @@ ALGORITHM = ann
 TRAIN_FILE = ./data/ml2013final_train.dat
 RESAMPLED_FILE = ./data/resampled.dat
 DOWNSAMPLED_FILE = ./data/downsampled.dat
+DOWNSAMPLED_26x30_FILE = ./data/downsampled_26x30.dat
 FILLED_FILE = ./data/filled.dat
 TEST_FILE = ./data/ml2013final_test1.nolabel.dat
 OUTPUT = ./data/output.dat
@@ -68,10 +69,9 @@ resample: build
 downsample: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a downsample\
-		-i $(RESAMPLED_FILE)\
-		-o $(DOWNSAMPLED_FILE)\
-		-x 2\
-		-y 2
+		-i $(TRAIN_FILE)\
+		-o $(DOWNSAMPLED_26x30_FILE)\
+		-s 4
 
 fill: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
