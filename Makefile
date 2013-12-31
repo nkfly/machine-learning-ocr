@@ -70,7 +70,8 @@ downsample: build
 		-a downsample\
 		-i $(RESAMPLED_FILE)\
 		-o $(DOWNSAMPLED_FILE)\
-		-s 2
+		-x 2\
+		-y 2
 
 fill: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\

@@ -41,8 +41,8 @@ public class DownSampler extends Preprocessor {
 				this.scaleY = this.scaleX;
 			}
 		} else {
-			this.scaleX = Integer.parseInt(line.getOptionValue("scaleX"));
-			this.scaleY = Integer.parseInt(line.getOptionValue("scaleY"));
+			this.scaleX = Integer.parseInt(line.getOptionValue("scale-x"));
+			this.scaleY = Integer.parseInt(line.getOptionValue("scale-y"));
 		}
 
 		return true;
