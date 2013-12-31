@@ -164,4 +164,40 @@ public class Preprocess {
 		
 	}
 	
+	public static void getTrunkOfZodiac(String input, String output, double threshold, int zodiac, int mergeUpperBound) throws IOException{
+		
+		BufferedReader br = new BufferedReader(new FileReader(input));
+		String line;
+		BufferedWriter bw = new BufferedWriter(new FileWriter(output, true));
+		int [] trunkArray = new int[12810]; 
+		int limit = 0;
+		while((line = br.readLine()) != null){
+			Point p = new Point(line);
+			if(p.getZodiac() == zodiac){
+				limit++;
+				for(Dimension d : p.getDimensionArray()){
+					if(d.getValue() < threshold)continue;
+					trunkArray[d.getDimension()-1] = 1;
+				}
+				
+				
+			}
+			if(limit >= mergeUpperBound)break;
+															
+		}
+		
+		bw.write("\""+Character.toString((char) ('A'+zodiac))+":");
+		for(int i = 0;i < trunkArray.length;i++){
+			bw.write(trunkArray[i]+"");			
+		}
+		bw.write("\",\n");
+		
+		
+
+		br.close();
+		bw.close();
+		
+		
+	}
+	
 }

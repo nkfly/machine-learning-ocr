@@ -28,9 +28,13 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
-			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
-			//ife.extractFeature("featureSelection.txt");
-			ife.analyze(7);
+			for(int i = 1;i <= 12;i++){
+				Preprocess.getTrunkOfZodiac(argv[0], argv[1], 0.9, i, 5);
+			}
+			
+//			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
+//			ife.extractFeature("featureSelection.txt");
+			//ife.analyze(7);
 
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {
