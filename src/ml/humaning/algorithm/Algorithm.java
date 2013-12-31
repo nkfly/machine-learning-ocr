@@ -10,9 +10,10 @@ import org.apache.commons.cli.GnuParser;
 
 import weka.core.Instances;
 
+import ml.humaning.Runner;
 import ml.humaning.util.Reader;
 
-public abstract class Algorithm {
+public abstract class Algorithm implements Runner {
 
 	Instances trainData;
 	Instances testData;

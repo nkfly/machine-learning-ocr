@@ -10,48 +10,30 @@ import org.apache.commons.cli.Option;
 import weka.core.Instances;
 import weka.core.Instance;
 
-import ml.humaning.util.OptionsHandler;
 import ml.humaning.util.Logger;
 
-import ml.humaning.util.Reader;
-import ml.humaning.util.Writer;
 
-public class Resampler implements OptionsHandler {
+public class Resampler extends Preprocessor {
 
-	private String inputFilePath;
-	private String outputFilePath;
 	private int numberOfSample;
 
-	public void registerOptions(Options options) {
-		options.addOption(new Option("i", "input", true, "input file"));
-		options.addOption(new Option("o", "output", true, "output file"));
+	public void registerOptions() {
+		super.registerOptions();
+
 		options.addOption(new Option("rspn", "resample-number", true, "number of resample"));
 	}
 
-	public boolean parseOptions(CommandLine line) {
-		boolean success = true;
-		if (line.hasOption("input")) {
-			inputFilePath = line.getOptionValue("input");
-		} else {
-			Logger.log("Missing option: input");
-			success = false;
-		}
+	public boolean parseArgv(String [] argv) throws Exception {
+		if (!super.parseArgv(argv)) return false;
 
-		if (line.hasOption("output")) {
-			outputFilePath = line.getOptionValue("output");
-		} else {
-			Logger.log("Missing option: output");
-			success = false;
-		}
-
-		if (line.hasOption("resample-number")) {
-			numberOfSample = Integer.parseInt(line.getOptionValue("resample-number"));
-		} else {
+		if (!line.hasOption("resample-number")) {
 			Logger.log("Missing option: resample-number");
-			success = false;
+			return false;
 		}
 
-		return success;
+		this.numberOfSample = Integer.parseInt(line.getOptionValue("resample-number"));
+
+		return true;
 	}
 
 	public Instances resample(Instances data) {
@@ -65,8 +47,7 @@ public class Resampler implements OptionsHandler {
 	}
 
 	public void run() throws Exception {
-		Instances data = Reader.readData(inputFilePath);
 		data = resample(data);
-		Writer.writeData(data, outputFilePath);
+		this.writeData(data);
 	}
 }

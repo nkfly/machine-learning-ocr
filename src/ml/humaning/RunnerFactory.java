@@ -5,13 +5,23 @@ import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.LinearSVM;
 import ml.humaning.algorithm.AdaBoost;
 
-public class AlgorithmFactory {
+import ml.humaning.preprocessor.Resampler;
 
-	public static Algorithm create(String name) {
+import ml.humaning.util.Logger;
 
+public class RunnerFactory {
+
+	public static Runner create(String name) {
+
+		// algorithms
 		if ("knn".equals(name)) return new KNN();
 		if ("linear-svm".equals(name)) return new LinearSVM();
 		if ("adaboost".equals(name)) return new AdaBoost();
+
+		// preprecessors
+		if ("resample".equals(name)) return new Resampler();
+
+		Logger.log("no runner match for " + name);
 
 		return null;
 	}

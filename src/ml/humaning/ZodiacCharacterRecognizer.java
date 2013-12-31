@@ -7,8 +7,6 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.CommandLine;
 
-import ml.humaning.algorithm.Algorithm;
-
 import ml.humaning.util.CommandLineHelper;
 
 public class ZodiacCharacterRecognizer {
@@ -29,15 +27,15 @@ public class ZodiacCharacterRecognizer {
 
 			// initial algorithm
 			String algorithm = line.getOptionValue("a");
-			Algorithm algo = AlgorithmFactory.create(algorithm);
+			Runner runner = RunnerFactory.create(algorithm);
 
 			// parse argv for algorithm
-			if (!algo.parseArgv(argv, options)) {
+			if (!runner.parseArgv(argv, options)) {
 				printUsage();
 				return;
 			}
 
-			algo.run();
+			runner.run();
 		} catch (ParseException e) {
 			System.err.println( "Parsing failed.  Reason: " + e.getMessage());
 		} catch (Exception e) {
