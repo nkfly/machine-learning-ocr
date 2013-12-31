@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import weka.core.Instances;
+import weka.core.Attribute;
 import weka.core.converters.LibSVMLoader;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;

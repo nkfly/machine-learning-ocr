@@ -10,7 +10,7 @@ import ml.humaning.util.Logger;
 public class Point {
 
 	public static final int IMAGE_WIDTH = 105;
-	public static final int IMAGE_HIGHT = 122;
+	public static final int IMAGE_HEIGHT = 122;
 
 	/* private int zodiac; */
 	/* private Dimension [] dimensionArray; */
@@ -41,7 +41,7 @@ public class Point {
 	public double length(){
 		double square = 0.0;
 
-		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HIGHT; i++) {
+		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
 			if (toRegion(i) == emptyRegion) continue;
 
 			double value = this.value(i);
@@ -54,7 +54,7 @@ public class Point {
 	public double lengthWithoutRegion(int region) {
 		double square = 0.0;
 
-		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HIGHT; i++) {
+		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
 			if (toRegion(i) == region) continue;
 
 			double value = this.value(i);
@@ -67,7 +67,7 @@ public class Point {
 	public double innerProduct(Point p){
 		double product = 0.0;
 
-		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HIGHT; i++) {
+		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
 			if (toRegion(i) == emptyRegion) continue;
 
 			product += this.value(i) * p.value(i);
@@ -105,7 +105,7 @@ public class Point {
 	/* } */
 
 	public static int toRegion(int r, int c) {
-		int u = r / (Point.IMAGE_HIGHT/2);
+		int u = r / (Point.IMAGE_HEIGHT/2);
 		int v = c / (Point.IMAGE_WIDTH/2);
 		if (u > 1) u = 1;
 		if (v > 1) v = 1;
@@ -128,7 +128,7 @@ public class Point {
 
 		double [] regions = new double[4];
 
-		for (int i = 0; i < Point.IMAGE_WIDTH * Point.IMAGE_HIGHT; i++) {
+		for (int i = 0; i < Point.IMAGE_WIDTH * Point.IMAGE_HEIGHT; i++) {
 			int idx = toRegion(i);
 			regions[idx - 1] += inst.value(i);
 		}
