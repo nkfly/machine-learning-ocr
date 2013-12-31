@@ -11,7 +11,6 @@ import ml.humaning.algorithm.Algorithm;
 
 import ml.humaning.util.CommandLineHelper;
 
-
 public class ZodiacCharacterRecognizer {
 	static Options options;
 
@@ -21,15 +20,18 @@ public class ZodiacCharacterRecognizer {
 		CommandLineParser parser = new GnuParser();
 
 		try {
+			// parse algorithm type (-a)
 			CommandLine line = parser.parse(options, argv, true);
 			if (!line.hasOption("a")) {
 				printUsage();
 				return;
 			}
 
+			// initial algorithm
 			String algorithm = line.getOptionValue("a");
 			Algorithm algo = AlgorithmFactory.create(algorithm);
 
+			// parse argv for algorithm
 			if (!algo.parseArgv(argv, options)) {
 				printUsage();
 				return;
