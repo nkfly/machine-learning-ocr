@@ -23,5 +23,18 @@ public class Reader {
 		return data;
 
 	}
+	
+	public static int getMaxDimension(Point [] allData){
+		int maxDimension = 0;
+		for(Point p : allData){
+			Dimension [] dArray = p.getDimensionArray();
+			if(dArray != null && dArray.length > 0 && dArray[dArray.length-1].getDimension() > maxDimension){
+				maxDimension = dArray[dArray.length-1].getDimension();				
+			}
+		}
+		
+		return maxDimension;
+		
+	}
 
 }

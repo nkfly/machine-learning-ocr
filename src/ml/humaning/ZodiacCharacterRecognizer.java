@@ -28,13 +28,22 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
-			for(int i = 1;i <= 12;i++){
-				Preprocess.getTrunkOfZodiac(argv[0], argv[1], 0.9, i, 5);
-			}
+//			for(int i = 1;i <= 12;i++){
+//				Preprocess.getTrunkOfZodiac(argv[0], argv[1], 0.1, i, 3);
+//			}
+			
+//			ANN ann = new ANN();
+//			ann.train(argv[0]);
+//			ann.predict(argv[1], argv[2]);
+			
+			SMO smo = new SMO();
+			smo.train(argv[0]);
+			smo.predict(argv[1], argv[2]);
+			
 			
 //			ImageFeatureExtractor ife = new ImageFeatureExtractor(argv[0]);
 //			ife.extractFeature("featureSelection.txt");
-			//ife.analyze(7);
+//			ife.analyze(7);
 
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {

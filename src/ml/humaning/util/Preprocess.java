@@ -169,7 +169,7 @@ public class Preprocess {
 		BufferedReader br = new BufferedReader(new FileReader(input));
 		String line;
 		BufferedWriter bw = new BufferedWriter(new FileWriter(output, true));
-		int [] trunkArray = new int[12810]; 
+		int [] trunkArray = new int[35*35]; 
 		int limit = 0;
 		while((line = br.readLine()) != null){
 			Point p = new Point(line);

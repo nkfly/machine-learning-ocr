@@ -9,8 +9,13 @@ public class Point implements Comparable <Point>{
 	private Dimension [] dimensionArray;
 	private double distanceToReference = 0.0;
 	private int maskRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area
-	public static final int width = 105;
-	public static final int height = 122;
+	public static final int width = 35;
+	public static final int height = 35;
+	
+	public int getMaxDimension(){
+		return dimensionArray[dimensionArray.length-1].getDimension();
+		
+	}
 	
 	public float [][] getFloatArray(){
 		float [][] floatArray = new float[Point.width][Point.height];
@@ -18,6 +23,19 @@ public class Point implements Comparable <Point>{
 			floatArray[(d.getDimension()-1)%width][(d.getDimension()-1)/width] = (float)d.getValue();
 		}
 		return floatArray;
+	}
+	
+	public double [] toValueArrayForKN(int totalDimension){
+		double [] valueArray = new double[totalDimension];
+		for(int i = 0 ;i < valueArray.length;i++){
+			valueArray[i] = -0.5;
+		}
+		
+		for(Dimension d : dimensionArray){
+			valueArray[d.getDimension()-1] = d.getValue(); 
+		}
+		return valueArray;
+		
 	}
 
 	public Point(String record){
@@ -60,17 +78,17 @@ public class Point implements Comparable <Point>{
 	
 
 	public int getRegion(int pixel){
-		int row = (pixel-1) / 105;
-		int col = (pixel-1) % 105;
+		int row = (pixel-1) / width;
+		int col = (pixel-1) % width;
 
-		if (row<105/2) { //UP
-			if(col<105/2){
+		if (row<width/2) { //UP
+			if(col<width/2){
 				return 1;
 			}else{
 				return 2;
 			}
 		} else {   //Down
-			if (col < 105/2) {
+			if (col < width/2) {
 				return 3;
 			} else {
 				return 4;
@@ -168,6 +186,19 @@ public class Point implements Comparable <Point>{
 				libsvm += d.getDimension()+":"+d.getValue()+" ";
 			}
 		}
+		return libsvm.trim();
+	}
+	
+	public String toLIBSVMString(int maxDimension){
+		String libsvm = zodiac + " ";
+		boolean haveWritten = false;
+		for(Dimension d : dimensionArray){
+			if(getRegion(d.getDimension()) != maskRegion){
+				libsvm += d.getDimension()+":"+d.getValue()+" ";
+				if(d.getDimension() == maxDimension)haveWritten = true;
+			}
+		}
+		if(!haveWritten)libsvm += maxDimension+":0";
 		return libsvm.trim();
 	}
 	
