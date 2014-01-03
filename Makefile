@@ -63,6 +63,13 @@ runAdaBoost: build
 		-te $(RESAMPLED_FILE)\
 		-o $(OUTPUT)
 
+runUniform: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a uniform-aggregation\
+		-tr $(RESAMPLED_FILE)\
+		-te $(RESAMPLED_FILE)\
+		-o $(OUTPUT)
+
 resample: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a resample\

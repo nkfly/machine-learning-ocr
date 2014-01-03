@@ -2,6 +2,10 @@ package ml.humaning.algorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 import org.apache.commons.cli.Option;
 
@@ -20,6 +24,7 @@ public class KNN extends Algorithm {
 
 	private int k;
 	private String modelPath = "./data/knn.model";
+	private String modelDataPath = "./data/knn_model.dat";
 
 	// ----- Getter and Setter -----
 	public void setK(int k) {
@@ -49,17 +54,25 @@ public class KNN extends Algorithm {
 
 	// ----- load/save model -----
 	public void loadModel() throws Exception {
-		Logger.log("Loading model from " + modelPath + "...");
+		Logger.log("KNN: Loading model from " + modelPath + "...");
 
-		this.trainData = Reader.readData(modelPath);
+		this.trainData = Reader.readData(modelDataPath);
+
+		FileInputStream fs = new FileInputStream(modelPath);
+		BufferedReader in = new BufferedReader(new InputStreamReader(fs));
+		k = Integer.parseInt(in.readLine());
 
 		Logger.log("DONE");
 	}
 
 	public void saveModel() throws Exception {
-		Logger.log("Loading model from " + modelPath + "...");
+		Logger.log("KNN: Saving model to " + modelPath + "...");
 
-		Writer.writeData(trainData, modelPath);
+		Writer.writeData(trainData, modelDataPath);
+
+		PrintWriter out = new PrintWriter(modelPath, "UTF-8");
+		out.println(k);
+		out.close();
 
 		Logger.log("DONE");
 	}
@@ -70,6 +83,7 @@ public class KNN extends Algorithm {
 	}
 
 	// ----- Predict -----
+	// [todo] - refactor it
 	public ArrayList<Integer> predict(Instances data) {
 		Logger.log("Start KNN predict...");
 		ArrayList<Integer> results = new ArrayList<Integer>();

@@ -37,7 +37,7 @@ class MySaver extends LibSVMSaver {
 public class Writer {
 
 	public static void writeData(Instances data, String fileName) throws IOException {
-		Logger.log("Write data from file " + fileName + "...");
+		Logger.log("Write data to file " + fileName + "...");
 
 		LibSVMSaver saver = new MySaver();
 		saver.setFile(new File(fileName));
