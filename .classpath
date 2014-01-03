@@ -9,5 +9,8 @@
 	<classpathentry kind="lib" path="libs/ij.jar"/>
 	<classpathentry kind="lib" path="libs/JFeatureLib-1.6.0-jar-with-dependencies.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/neuroph-core-2.8.jar"/>
+	<classpathentry kind="lib" path="libs/neuroph-imgrec-2.8.jar"/>
+	<classpathentry kind="lib" path="libs/neuroph-ocr-2.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
