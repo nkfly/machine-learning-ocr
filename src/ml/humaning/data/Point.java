@@ -46,7 +46,7 @@ public class Point {
 		double square = 0.0;
 		double [] values = inst.toDoubleArray();
 
-		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
+		for (int i = 0; i < values.length - 1; i++) {
 			if (toRegion(i) == emptyRegion) continue;
 
 			double value = values[i];
@@ -60,7 +60,7 @@ public class Point {
 		double square = 0.0;
 		double [] values = inst.toDoubleArray();
 
-		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
+		for (int i = 0; i < values.length - 1; i++) {
 			if (toRegion(i) == region) continue;
 
 			double value = values[i];
@@ -76,7 +76,7 @@ public class Point {
 		double [] values = inst.toDoubleArray();
 		double [] pValues = p.inst.toDoubleArray();
 
-		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
+		for (int i = 0; i < values.length - 1; i++) {
 			if (toRegion(i) == emptyRegion) continue;
 
 			product += values[i] * pValues[i];
