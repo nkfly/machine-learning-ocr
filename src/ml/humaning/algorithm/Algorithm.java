@@ -60,6 +60,14 @@ public abstract class Algorithm implements Runner {
 		return true;
 	}
 
+	public void loadModel() throws Exception {
+		throw new Exception("Not implemented yet");
+	}
+
+	public void saveModel() throws Exception {
+		throw new Exception("Not implemented yet");
+	}
+
 	public abstract void train(Instances trainData) throws Exception;
 	public abstract int predict(Instance inst) throws Exception;
 	public ArrayList<Integer> predict(Instances data) throws Exception {
@@ -88,6 +96,7 @@ public abstract class Algorithm implements Runner {
 		this.train(trainData);
 		ArrayList<Integer> results = this.predict(testData);
 
+		saveModel();
 		writeResult(results);
 	}
 }

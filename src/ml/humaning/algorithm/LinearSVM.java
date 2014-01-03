@@ -2,6 +2,10 @@ package ml.humaning.algorithm;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.ObjectInputStream;
+import java.io.FileInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
 
 import org.apache.commons.cli.Option;
 
@@ -14,7 +18,8 @@ import ml.humaning.util.Logger;
 
 public class LinearSVM extends Algorithm {
 
-	LibLINEAR libLinear;
+	private LibLINEAR libLinear;
+	private String modelPath = "./data/linear_svm.model";
 
 	private int s;
 
@@ -39,6 +44,28 @@ public class LinearSVM extends Algorithm {
 		return true;
 	}
 
+	// ----- load/save model -----
+	public void loadModel() throws Exception {
+		Logger.log("Loading model from " + modelPath + "...");
+
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelPath));
+		libLinear = (LibLINEAR)in.readObject();
+		in.close();
+
+		Logger.log("DONE");
+	}
+
+	public void saveModel() throws Exception {
+		Logger.log("Loading model from " + modelPath + "...");
+
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelPath));
+		out.writeObject(libLinear);
+		out.close();
+
+		Logger.log("DONE");
+	}
+
+	// ----- train and predict -----
 	public void train(Instances data) throws Exception {
 		Logger.log("Start LibLinear train...");
 

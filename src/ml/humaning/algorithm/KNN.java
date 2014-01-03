@@ -13,10 +13,13 @@ import ml.humaning.data.Point;
 import ml.humaning.data.comparator.CosineDistanceComparator;
 
 import ml.humaning.util.Logger;
+import ml.humaning.util.Writer;
+import ml.humaning.util.Reader;
 
 public class KNN extends Algorithm {
 
 	private int k;
+	private String modelPath = "./data/knn.model";
 
 	// ----- Getter and Setter -----
 	public void setK(int k) {
@@ -42,6 +45,23 @@ public class KNN extends Algorithm {
 		this.k = Integer.parseInt(line.getOptionValue('k'));
 
 		return true;
+	}
+
+	// ----- load/save model -----
+	public void loadModel() throws Exception {
+		Logger.log("Loading model from " + modelPath + "...");
+
+		this.trainData = Reader.readData(modelPath);
+
+		Logger.log("DONE");
+	}
+
+	public void saveModel() throws Exception {
+		Logger.log("Loading model from " + modelPath + "...");
+
+		Writer.writeData(trainData, modelPath);
+
+		Logger.log("DONE");
 	}
 
 	// ----- Train -----
