@@ -15,6 +15,7 @@ import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
 import ml.humaning.util.ImageFeatureExtractor;
 import ml.humaning.util.Preprocess;
+import ml.humaning.util.Reader;
 import ml.humaning.util.SVD;
 
 public class ZodiacCharacterRecognizer {
@@ -29,6 +30,16 @@ public class ZodiacCharacterRecognizer {
 
 		try {
 			
+			ImageFeatureExtractor.featureExtract(argv[0], argv[1]);
+			System.out.println("train finished");
+			ImageFeatureExtractor.featureExtract(argv[2], argv[3]);
+			System.out.println("test finished");
+			KNN knn = new KNN(argv[1]);
+			//System.out.println(knn.getCVError(6, 5));
+			System.out.println("knn train finished");
+			knn.predict(1, argv[3], "result.out");
+			System.out.println("k="+6+" "+Reader.getTestAccuracy("ans1.dat", "result.out"));
+
 
 			CommandLine line = parser.parse(options, argv);
 			if (!line.hasOption("a")) {

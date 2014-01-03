@@ -7,6 +7,7 @@
 	<classpathentry kind="lib" path="libs/libsvm.jar"/>
 	<classpathentry kind="lib" path="libs/lingpipe-4.1.0.jar"/>
 	<classpathentry kind="lib" path="libs/ij.jar"/>
+	<classpathentry kind="lib" path="libs/JFeatureLib-1.6.0-jar-with-dependencies.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
