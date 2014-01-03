@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.apache.commons.cli.Option;
 
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.functions.LibLINEAR;
 import weka.classifiers.Evaluation;
@@ -48,17 +49,17 @@ public class LinearSVM extends Algorithm {
 		options[1] = Integer.toString(this.s);
 
 		libLinear.setOptions(options);
-		/* libLinear.buildClassifier(data); */
+		libLinear.buildClassifier(data);
 
-		Evaluation eval = new Evaluation(data);
-		eval.crossValidateModel(libLinear, data, 10, new Random());
-		Logger.log("accuracy = " + eval.pctCorrect());
+		/* Evaluation eval = new Evaluation(data); */
+		/* eval.crossValidateModel(libLinear, data, 10, new Random()); */
+		/* Logger.log("accuracy = " + eval.pctCorrect()); */
 
-		Logger.log("s = " + this.s);
+		/* Logger.log("s = " + this.s); */
 		Logger.log("DONE");
 	}
 
-	public ArrayList<Integer> predict(Instances data) {
-		return null;
+	public int predict(Instance inst) throws Exception {
+		return (int)libLinear.classifyInstance(inst);
 	}
 }

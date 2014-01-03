@@ -15,7 +15,11 @@ DOWNSAMPLED_FILE = ./data/downsampled.dat
 DOWNSAMPLED_26x30_FILE = ./data/downsampled_26x30.dat
 FILLED_FILE = ./data/filled.dat
 TEST_FILE = ./data/ml2013final_test1.nolabel.dat
+
+# output files
 OUTPUT = ./data/output.dat
+KNN_OUTPUT = ./data/knn_output.dat
+LINEARSVM_OUTPUT = ./data/linear_svm_output.dat
 
 all: build
 
@@ -42,7 +46,7 @@ runKNN: build
 		-k 10\
 		-tr $(RESAMPLED_FILE)\
 		-te $(RESAMPLED_FILE)\
-		-o $(OUTPUT)
+		-o $(KNN_OUTPUT)
 
 runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
@@ -50,7 +54,7 @@ runLinearSVM: build
 		-s 7\
 		-tr $(RESAMPLED_FILE)\
 		-te $(RESAMPLED_FILE)\
-		-o $(OUTPUT)
+		-o $(LINEARSVM_OUTPUT)
 
 runAdaBoost: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\

@@ -1,6 +1,7 @@
 package ml.humaning.algorithm;
 
 import java.util.ArrayList;
+import java.io.PrintWriter;
 
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.Option;
@@ -8,15 +9,18 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 
+import weka.core.Instance;
 import weka.core.Instances;
 
 import ml.humaning.Runner;
 import ml.humaning.util.Reader;
+import ml.humaning.util.Logger;
 
 public abstract class Algorithm implements Runner {
 
 	Instances trainData;
 	Instances testData;
+	String outputPath;
 	Options options;
 	CommandLine line;
 
@@ -51,17 +55,39 @@ public abstract class Algorithm implements Runner {
 
 		this.trainData = Reader.readData(line.getOptionValue("train-file"));
 		this.testData = Reader.readData(line.getOptionValue("test-file"));
+		this.outputPath = line.getOptionValue("output");
 
 		return true;
 	}
 
 	public abstract void train(Instances trainData) throws Exception;
-	public abstract ArrayList<Integer> predict(Instances testData) throws Exception;
+	public abstract int predict(Instance inst) throws Exception;
+	public ArrayList<Integer> predict(Instances data) throws Exception {
+		ArrayList<Integer> results = new ArrayList<Integer>();
+
+		for (Instance inst : data) {
+			results.add(this.predict(inst));
+		}
+
+		return results;
+	}
+
+	private void writeResult(ArrayList<Integer> results) throws Exception {
+		Logger.log("Write output to " + outputPath + "...");
+		PrintWriter writer = new PrintWriter(this.outputPath, "UTF-8");
+
+		for (Integer value : results) {
+			writer.println("" + (value + 1));
+		}
+
+		writer.close();
+		Logger.log("DONE");
+	}
 
 	public void run() throws Exception {
 		this.train(trainData);
-		this.predict(testData);
+		ArrayList<Integer> results = this.predict(testData);
 
-		// [todo] - write output file
+		writeResult(results);
 	}
 }

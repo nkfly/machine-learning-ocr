@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.apache.commons.cli.Option;
 
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.meta.AdaBoostM1;
 import weka.classifiers.Evaluation;
@@ -30,7 +31,7 @@ public class AdaBoost extends Algorithm {
 		Logger.log("DONE");
 	}
 
-	public ArrayList<Integer> predict(Instances data) {
-		return null;
+	public int predict(Instance inst) throws Exception {
+		return 0;
 	}
 }
