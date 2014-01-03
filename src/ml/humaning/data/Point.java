@@ -34,17 +34,22 @@ public class Point {
 		return inst.value(i);
 	}
 
+	public double [] toDoubleArray() {
+		return inst.toDoubleArray();
+	}
+
 	public int getZodiac() {
 		return (int)inst.classValue();
 	}
 
 	public double length(){
 		double square = 0.0;
+		double [] values = inst.toDoubleArray();
 
 		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
 			if (toRegion(i) == emptyRegion) continue;
 
-			double value = this.value(i);
+			double value = values[i];
 			square += value * value;
 		}
 
@@ -53,11 +58,12 @@ public class Point {
 
 	public double lengthWithoutRegion(int region) {
 		double square = 0.0;
+		double [] values = inst.toDoubleArray();
 
 		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
 			if (toRegion(i) == region) continue;
 
-			double value = this.value(i);
+			double value = values[i];
 			square += value * value;
 		}
 
@@ -67,10 +73,13 @@ public class Point {
 	public double innerProduct(Point p){
 		double product = 0.0;
 
+		double [] values = inst.toDoubleArray();
+		double [] pValues = p.inst.toDoubleArray();
+
 		for (int i = 0; i < IMAGE_WIDTH * IMAGE_HEIGHT; i++) {
 			if (toRegion(i) == emptyRegion) continue;
 
-			product += this.value(i) * p.value(i);
+			product += values[i] * pValues[i];
 		}
 
 		return product;

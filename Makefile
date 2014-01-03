@@ -48,8 +48,8 @@ runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a linear-svm\
 		-s 7\
-		-tr $(TRAIN_FILE)\
-		-te $(TRAIN_FILE)\
+		-tr $(RESAMPLED_FILE)\
+		-te $(RESAMPLED_FILE)\
 		-o $(OUTPUT)
 
 runAdaBoost: build
