@@ -44,6 +44,14 @@ public abstract class Algorithm implements Runner {
 		return parseArgv(argv);
 	}
 
+	private boolean checkTrainFileOptionIfNeed(CommandLine line) {
+		if (this instanceof Aggregation) {
+			return true; // aggregation don't need to read train file
+		}
+
+		return line.hasOption("train-file");
+	}
+
 	public boolean parseArgv(String [] argv) throws Exception {
 		registerOptions();
 
@@ -55,13 +63,10 @@ public abstract class Algorithm implements Runner {
 		}
 
 		if ("normal".equals(this.runMode)) {
-			if (!line.hasOption("train-file") ||
+			if (!checkTrainFileOptionIfNeed(line) ||
 					!line.hasOption("test-file")) {
 				return false;
 			}
-
-			this.trainData = Reader.readData(line.getOptionValue("train-file"));
-			this.testData = Reader.readData(line.getOptionValue("test-file"));
 
 			if (line.hasOption("output")) {
 				this.outputPath = line.getOptionValue("output");
@@ -72,18 +77,14 @@ public abstract class Algorithm implements Runner {
 				return false;
 			}
 
-			this.testData = Reader.readData(line.getOptionValue("test-file"));
-
 			if (line.hasOption("output")) {
 				this.outputPath = line.getOptionValue("output");
 			}
 
 		} else if ("cv".equals(this.runMode)) {
-			if (!line.hasOption("train-file")) {
+			if (!checkTrainFileOptionIfNeed(line)) {
 				return false;
 			}
-
-			this.trainData = Reader.readData(line.getOptionValue("train-file"));
 		}
 
 		if (this.outputPath == null) this.outputPath = this.getOutputPath();
@@ -134,6 +135,11 @@ public abstract class Algorithm implements Runner {
 	}
 
 	public void runPredictWithTrainData() throws Exception {
+		if (!(this instanceof Aggregation)) {
+			this.trainData = Reader.readData(line.getOptionValue("train-file"));
+		}
+		this.testData = Reader.readData(line.getOptionValue("test-file"));
+
 		this.train(trainData);
 		ArrayList<Integer> results = this.predict(testData);
 
@@ -142,20 +148,33 @@ public abstract class Algorithm implements Runner {
 	}
 
 	public void runPredictWithLoadModel() throws Exception {
+		this.testData = Reader.readData(line.getOptionValue("test-file"));
 		this.loadModel();
 
 		ArrayList<Integer> results = this.predict(testData);
 		writeResult(results);
 	}
 
+	protected Instances loadCVTrainData(int nFold, int fold) {
+		return trainData.trainCV(nFold, fold);
+	}
+
+	protected Instances loadCVTestData(int nFold, int fold) {
+		return trainData.testCV(nFold, fold);
+	}
+
 	public void runCrossValidation() throws Exception {
+		if (!(this instanceof Aggregation)) {
+			this.trainData = Reader.readData(line.getOptionValue("train-file"));
+		}
+
 		int N = 5;
 		int i;
 		double average = 0.0;
 
 		for (i = 0; i < N; i++) {
-			Instances trainCV = trainData.trainCV(N, i);
-			Instances testCV = trainData.testCV(N, i);
+			Instances trainCV = loadCVTrainData(N, i);
+			Instances testCV = loadCVTestData(N, i);
 
 			this.train(trainCV);
 			ArrayList<Integer> results = this.predict(testCV);
