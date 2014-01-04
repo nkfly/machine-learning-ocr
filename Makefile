@@ -82,9 +82,8 @@ runUniform: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a uniform\
 		-m cv\
-		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)\
-		-o $(OUTPUT)
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runLinearAggregation: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\

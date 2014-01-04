@@ -18,9 +18,9 @@ import ml.humaning.util.Logger;
 import ml.humaning.validation.Validator;
 
 public abstract class Algorithm implements Runner {
-	Instances trainData;
-	Instances testData;
-	Instances testCV;
+	public Instances trainData;
+	public Instances testData;
+	public Instances testCV;
 	String outputPath;
 	String runMode = "normal";
 	public Options options;
