@@ -41,12 +41,6 @@ run:
 		-o $(OUTPUT)
 
 # ===== Algorithms =====
-runSVM:
-	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
-		-a svm\
-		-tr $(TRAIN_FILE)\
-		-te $(TEST_FILE)
-
 runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
@@ -66,6 +60,13 @@ runLinearSVM: build
 runPolySVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a poly-svm\
+		-m cv\
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
+
+runNaiveBayes: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a naive-bayes\
 		-m cv\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
