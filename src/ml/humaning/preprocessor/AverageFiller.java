@@ -62,7 +62,7 @@ public class AverageFiller implements OptionsHandler {
 	public void calculateAverage(Instances data) {
 		Logger.log("Calculating Average...");
 
-		int l = Point.IMAGE_WIDTH * Point.IMAGE_HIGHT;
+		int l = Point.IMAGE_WIDTH * Point.IMAGE_HEIGHT;
 
 		averages = new Instance[13];
 		zodiacCount = new int[13];
@@ -118,7 +118,7 @@ public class AverageFiller implements OptionsHandler {
 		Instance average = averages[point.getZodiac()];
 
 		int emptyRegion = point.getEmptyRegion();
-		for (int r = 0; r < Point.IMAGE_HIGHT; r++) {
+		for (int r = 0; r < Point.IMAGE_HEIGHT; r++) {
 			for (int c = 0; c < Point.IMAGE_WIDTH; c++) {
 				if (Point.toRegion(r, c) == emptyRegion) {
 					int index = Point.toIndex(r, c);
