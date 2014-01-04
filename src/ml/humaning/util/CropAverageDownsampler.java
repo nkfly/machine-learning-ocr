@@ -28,7 +28,7 @@ public class CropAverageDownsampler {
 					_left = d.getDimension() % 105;
 				}
 				if(d.getValue() > _gradient && d.getDimension() % 105 > _right){
-					_right = d.getDimension() % 105
+					_right = d.getDimension() % 105;
 				}
 	            if(d.getValue() > _gradient && d.getDimension() / 105 < _top){
 	            	_top = d.getDimension() / 105;
