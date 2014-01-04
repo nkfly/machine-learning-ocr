@@ -5,6 +5,7 @@ CLASSPATH := $(CLASSPATH):libs/libsvm.jar
 CLASSPATH := $(CLASSPATH):libs/lingpipe-4.1.0.jar
 CLASSPATH := $(CLASSPATH):libs/LibLINEAR.jar
 CLASSPATH := $(CLASSPATH):libs/liblinear-1.92.jar
+CLASSPATH := $(CLASSPATH):libs/WekaLibSVM.jar
 
 ALGORITHM = ann
 
@@ -49,6 +50,7 @@ runSVM:
 runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
+		-m cv\
 		-k 13\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
@@ -56,10 +58,17 @@ runKNN: build
 runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a linear-svm\
-		-m cv\
+		-m lm\
 		-s 7\
 		-tr $(RESAMPLED_FILE)\
 		-te $(RESAMPLED_FILE)
+
+runPolySVM: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a poly-svm\
+		-m cv\
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runAdaBoost: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
@@ -81,9 +90,8 @@ runLinearAggregation: build
 		-a linear-svm-aggregation\
 		-m cv\
 		-s 7\
-		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)\
-		-o $(OUTPUT)
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runAggregation: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\

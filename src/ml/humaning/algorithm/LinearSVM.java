@@ -15,6 +15,7 @@ import weka.classifiers.functions.LibLINEAR;
 import weka.classifiers.Evaluation;
 
 import ml.humaning.util.Logger;
+import ml.humaning.util.WekaClassifierManager;
 
 public class LinearSVM extends Algorithm {
 
@@ -52,9 +53,7 @@ public class LinearSVM extends Algorithm {
 	public void loadModel(String modelPath) throws Exception {
 		Logger.log("LinearSVM: Loading model from " + modelPath + "...");
 
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelPath));
-		libLinear = (LibLINEAR)in.readObject();
-		in.close();
+		libLinear = (LibLINEAR)WekaClassifierManager.loadClassifier(modelPath);
 
 		Logger.log("DONE");
 	}
@@ -62,9 +61,7 @@ public class LinearSVM extends Algorithm {
 	public void saveModel(String modelPath) throws Exception {
 		Logger.log("LinearSVM: Saving model to " + modelPath + "...");
 
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelPath));
-		out.writeObject(libLinear);
-		out.close();
+		WekaClassifierManager.saveClassifier(libLinear, modelPath);
 
 		Logger.log("DONE");
 	}

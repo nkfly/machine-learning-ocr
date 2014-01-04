@@ -12,16 +12,21 @@ import weka.classifiers.functions.LibLINEAR;
 import ml.humaning.algorithm.Aggregation;
 import ml.humaning.algorithm.Algorithm;
 import ml.humaning.algorithm.KNN;
+import ml.humaning.algorithm.PolySVM;
 
 import ml.humaning.util.Logger;
+import ml.humaning.util.WekaClassifierManager;
 
 public class LinearSVMAggregation extends Aggregation {
 
 	private LibLINEAR libLinear;
 
 	public LinearSVMAggregation() throws Exception {
-		addAlgorithm(new KNN());
-		addAlgorithm(new ml.humaning.algorithm.LinearSVM());
+		KNN knn = new KNN();
+		knn.setK(13);
+
+		addAlgorithm(knn);
+		addAlgorithm(new PolySVM());
 	}
 
 	private int s;
@@ -51,12 +56,21 @@ public class LinearSVMAggregation extends Aggregation {
 		return "linear_svm_aggregation";
 	}
 
-	public void loadModel(String path) throws Exception {
-		// todo
+	// ----- load/save model -----
+	public void loadModel(String modelPath) throws Exception {
+		Logger.log("LinearSVM: Loading model from " + modelPath + "...");
+
+		libLinear = (LibLINEAR)WekaClassifierManager.loadClassifier(modelPath);
+
+		Logger.log("DONE");
 	}
 
-	public void saveModel(String path) throws Exception {
-		// todo
+	public void saveModel(String modelPath) throws Exception {
+		Logger.log("LinearSVM: Saving model to " + modelPath + "...");
+
+		WekaClassifierManager.saveClassifier(libLinear, modelPath);
+
+		Logger.log("DONE");
 	}
 
 	public void train(Instances data) throws Exception {
@@ -71,11 +85,6 @@ public class LinearSVMAggregation extends Aggregation {
 		libLinear.setOptions(options);
 		libLinear.buildClassifier(data);
 
-		/* Evaluation eval = new Evaluation(data); */
-		/* eval.crossValidateModel(libLinear, data, 10, new Random()); */
-		/* Logger.log("accuracy = " + eval.pctCorrect()); */
-
-		/* Logger.log("s = " + this.s); */
 		Logger.log("DONE");
 	}
 

@@ -62,7 +62,7 @@ public class KNN extends Algorithm {
 	public void loadModel(String modelPath) throws Exception {
 		Logger.log("KNN: Loading model from " + modelPath + "...");
 
-		this.trainData = Reader.readData(modelDataPath);
+		this.currentTrainData = Reader.readData(modelDataPath);
 
 		FileInputStream fs = new FileInputStream(modelPath);
 		BufferedReader in = new BufferedReader(new InputStreamReader(fs));
@@ -74,7 +74,7 @@ public class KNN extends Algorithm {
 	public void saveModel(String modelPath) throws Exception {
 		Logger.log("KNN: Saving model to " + modelPath + "...");
 
-		Writer.writeData(trainData, modelDataPath);
+		Writer.writeData(currentTrainData, modelDataPath);
 
 		PrintWriter out = new PrintWriter(modelPath, "UTF-8");
 		out.println(k);
