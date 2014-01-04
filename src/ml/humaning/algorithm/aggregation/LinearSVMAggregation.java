@@ -13,6 +13,9 @@ import ml.humaning.algorithm.Aggregation;
 import ml.humaning.algorithm.Algorithm;
 import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.PolySVM;
+import ml.humaning.algorithm.NBayes;
+import ml.humaning.algorithm.RForest;
+import ml.humaning.algorithm.AdaBoost;
 
 import ml.humaning.util.Logger;
 import ml.humaning.util.WekaClassifierManager;
@@ -25,8 +28,11 @@ public class LinearSVMAggregation extends Aggregation {
 		KNN knn = new KNN();
 		knn.setK(13);
 
-		addAlgorithm(knn);
-		addAlgorithm(new PolySVM());
+		addAlgorithm(knn); // 83%
+		addAlgorithm(new PolySVM()); // 71%
+		addAlgorithm(new AdaBoost()); // 64%
+		addAlgorithm(new RForest()); // 63%
+		addAlgorithm(new NBayes()); // 58%
 	}
 
 	private int s;

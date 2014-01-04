@@ -6,6 +6,7 @@ CLASSPATH := $(CLASSPATH):libs/lingpipe-4.1.0.jar
 CLASSPATH := $(CLASSPATH):libs/LibLINEAR.jar
 CLASSPATH := $(CLASSPATH):libs/liblinear-1.92.jar
 CLASSPATH := $(CLASSPATH):libs/WekaLibSVM.jar
+CLASSPATH := $(CLASSPATH):libs/wekaclassalgos.jar
 
 ALGORITHM = ann
 
@@ -78,11 +79,19 @@ runRandomForest: build
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
+runImmunos: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a immunos1\
+		-m cv\
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
+
 runAdaBoost: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a adaboost\
-		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)
+		-m cv\
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 # ===== Aggregation =====
 runUniform: build

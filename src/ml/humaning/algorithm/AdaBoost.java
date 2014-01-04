@@ -8,9 +8,10 @@ import org.apache.commons.cli.Option;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.meta.AdaBoostM1;
-import weka.classifiers.Evaluation;
+import weka.classifiers.functions.LibLINEAR;
 
 import ml.humaning.util.Logger;
+import ml.humaning.util.WekaClassifierManager;
 
 public class AdaBoost extends Algorithm {
 
@@ -20,22 +21,50 @@ public class AdaBoost extends Algorithm {
 		return "adaboost";
 	}
 
+	// ----- load/save model -----
+	public void loadModel(String modelPath) throws Exception {
+		Logger.log("AdaBoost: Loading model from " + modelPath + "...");
+
+		boost = (AdaBoostM1)WekaClassifierManager.loadClassifier(modelPath);
+
+		Logger.log("DONE");
+	}
+
+	public void saveModel(String modelPath) throws Exception {
+		Logger.log("AdaBoost: Saving model to " + modelPath + "...");
+
+		WekaClassifierManager.saveClassifier(boost, modelPath);
+
+		Logger.log("DONE");
+	}
+
 	public void train(Instances data) throws Exception {
 		Logger.log("Start AdaBoost train...");
 
-		boost = new AdaBoostM1();
-		boost.setNumIterations(1000000);
-		boost.buildClassifier(data);
+		LibLINEAR libLinear = new LibLINEAR();
 
-		Evaluation eval = new Evaluation(data);
-		eval.evaluateModel(boost, data);
-		/* eval.crossValidateModel(boost, data, 10, new Random()); */
-		Logger.log("accuracy = " + eval.pctCorrect());
+		String[] options = new String[8];
+		options[0] = "-S";
+		options[1] = "1";
+		options[2] = "-C";
+		options[3] = "1.0";
+		options[4] = "-E";
+		options[5] = "0.01";
+		options[6] = "-B";
+		options[7] = "1.0";
+
+		libLinear.setOptions(options);
+
+		boost = new AdaBoostM1();
+		boost.setClassifier(libLinear);
+		boost.setNumIterations(10);
+
+		boost.buildClassifier(data);
 
 		Logger.log("DONE");
 	}
 
 	public int predict(Instance inst) throws Exception {
-		return 0;
+		return (int)boost.classifyInstance(inst);
 	}
 }

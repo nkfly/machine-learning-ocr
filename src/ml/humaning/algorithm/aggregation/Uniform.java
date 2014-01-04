@@ -13,10 +13,13 @@ import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.PolySVM;
 import ml.humaning.algorithm.NBayes;
 import ml.humaning.algorithm.RForest;
+import ml.humaning.algorithm.AdaBoost;
 
 import ml.humaning.util.Logger;
 
 public class Uniform extends Aggregation {
+
+	private int [] weights = new int[]{5, 3, 2, 2, 1};
 
 	public Uniform() throws Exception {
 		KNN knn = new KNN();
@@ -24,6 +27,7 @@ public class Uniform extends Aggregation {
 
 		addAlgorithm(knn); // 83%
 		addAlgorithm(new PolySVM()); // 71%
+		addAlgorithm(new AdaBoost()); // 64%
 		addAlgorithm(new RForest()); // 63%
 		addAlgorithm(new NBayes()); // 58%
 	}
@@ -55,20 +59,26 @@ public class Uniform extends Aggregation {
 		double current, max = -1;
 		int currentIndex, maxIndex = -1;
 
-		for (Algorithm algo : algorithms) {
+		int nAlgo = algorithms.size();
+		for (int i = 0; i < nAlgo; i++) {
+			Algorithm algo = algorithms.get(i);
+
 			currentIndex = algo.predict(inst);
 
 			if (currentIndex < 0 || currentIndex >= 12) {
 				Random random = new Random();
 				currentIndex = random.nextInt(12);
+				Logger.log("WARNING!!!! Algorithm " + algo.getName() + " fail, guess one");
 			}
 
-			current = ++result[currentIndex];
+			result[currentIndex] += weights[i];
+			current = result[currentIndex];
 			if (current > max) {
 				max = current;
 				maxIndex = currentIndex;
 			}
 		}
+
 		Logger.log("result = " + Arrays.toString(result));
 		Logger.log("uniform predict = " + maxIndex);
 
