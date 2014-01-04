@@ -49,8 +49,7 @@ public class LinearSVM extends Algorithm {
 	}
 
 	// ----- load/save model -----
-	public void loadModel() throws Exception {
-		String modelPath = getModelPath();
+	public void loadModel(String modelPath) throws Exception {
 		Logger.log("LinearSVM: Loading model from " + modelPath + "...");
 
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelPath));
@@ -60,8 +59,7 @@ public class LinearSVM extends Algorithm {
 		Logger.log("DONE");
 	}
 
-	public void saveModel() throws Exception {
-		String modelPath = getModelPath();
+	public void saveModel(String modelPath) throws Exception {
 		Logger.log("LinearSVM: Saving model to " + modelPath + "...");
 
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelPath));

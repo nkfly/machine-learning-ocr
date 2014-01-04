@@ -16,7 +16,6 @@ public abstract class Aggregation extends Algorithm {
 	protected ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
 
 	public void addAlgorithm(Algorithm algo) throws Exception {
-		algo.loadModel();
 		algorithms.add(algo);
 	}
 
@@ -71,5 +70,15 @@ public abstract class Aggregation extends Algorithm {
 		}
 
 		return data;
+	}
+
+	protected void trainCV(int nFold, int fold) throws Exception {
+		Instances trainCV = loadCVTrainData(nFold, fold);
+
+		for (Algorithm algo : algorithms) {
+			algo.loadCVModel(nFold, fold);
+		}
+
+		this.train(trainCV);
 	}
 }

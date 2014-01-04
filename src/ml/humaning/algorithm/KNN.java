@@ -57,8 +57,8 @@ public class KNN extends Algorithm {
 	}
 
 	// ----- load/save model -----
-	public void loadModel() throws Exception {
-		String modelPath = getModelPath();
+
+	public void loadModel(String modelPath) throws Exception {
 		Logger.log("KNN: Loading model from " + modelPath + "...");
 
 		this.trainData = Reader.readData(modelDataPath);
@@ -70,8 +70,7 @@ public class KNN extends Algorithm {
 		Logger.log("DONE");
 	}
 
-	public void saveModel() throws Exception {
-		String modelPath = getModelPath();
+	public void saveModel(String modelPath) throws Exception {
 		Logger.log("KNN: Saving model to " + modelPath + "...");
 
 		Writer.writeData(trainData, modelDataPath);

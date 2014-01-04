@@ -24,17 +24,16 @@ public class Uniform extends Aggregation {
 		return "uniform_aggregation";
 	}
 
-	public void saveModel() throws Exception {
+	public void loadModel(String path) throws Exception {
+		// do nothing
+	}
+
+	public void saveModel(String path) throws Exception {
 		// do nothing
 	}
 
 	public void train(Instances data) throws Exception {
-		// load output files
-		// do voting
-
 		// Uniform don't need training
-
-		// load models
 	}
 
 	public int predict(Instance inst) throws Exception {

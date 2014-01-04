@@ -106,12 +106,32 @@ public abstract class Algorithm implements Runner {
 		return "./data/" + this.getName() + "_cv_" + nFold + "_" + fold + "_output.dat";
 	}
 
-	public void loadModel() throws Exception {
+	public String getCVModelPath(int nFold, int fold) {
+		return "./data/" + this.getName() + "_cv_" + nFold + "_" + fold + ".model";
+	}
+
+	public void loadModel(String path) throws Exception {
 		throw new Exception("Not implemented yet");
 	}
 
-	public void saveModel() throws Exception {
+	public void saveModel(String path) throws Exception {
 		throw new Exception("Not implemented yet");
+	}
+
+	public void loadModel() throws Exception {
+		loadModel(getModelPath());
+	}
+
+	public void saveModel() throws Exception {
+		saveModel(getModelPath());
+	}
+
+	public void loadCVModel(int nFold, int fold) throws Exception {
+		loadModel(getCVModelPath(nFold, fold));
+	}
+
+	public void saveCVModel(int nFold, int fold) throws Exception {
+		saveModel(getCVModelPath(nFold, fold));
 	}
 
 	public abstract void train(Instances trainData) throws Exception;
@@ -169,6 +189,12 @@ public abstract class Algorithm implements Runner {
 		return trainData.testCV(nFold, fold);
 	}
 
+	protected void trainCV(int nFold, int fold) throws Exception {
+		Instances trainCV = loadCVTrainData(nFold, fold);
+
+		this.train(trainCV);
+	}
+
 	public void runCrossValidation() throws Exception {
 		this.trainData = Reader.readData(line.getOptionValue("train-file"));
 
@@ -177,18 +203,24 @@ public abstract class Algorithm implements Runner {
 		double average = 0.0;
 
 		for (i = 0; i < N; i++) {
-			Instances trainCV = loadCVTrainData(N, i);
-			Instances testCV = loadCVTestData(N, i);
+			// train
+			this.trainCV(N, i);
 
-			this.train(trainCV);
+			// predict
+			Instances testCV = loadCVTestData(N, i);
 			ArrayList<Integer> results = this.predict(testCV);
+
+			// validate
 			double error = Validator.getError(testCV, results);
 			Logger.log("error = " + error);
 
+			// record
 			writeResult(results, getCVResultPath(N, i));
+			saveCVModel(N, i);
 
 			average += error;
 		}
+
 		average /= N;
 		Logger.log("Cross Validation Error = " + average);
 		Logger.log("Cross Validation Accuracy = " + (1.0 - average));
