@@ -118,6 +118,12 @@ fill: build
 		-i $(TRAIN_FILE)\
 		-o $(FILLED_FILE)
 
+mergeTest: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a merge-test\
+		-i ./data/test1.dat.txt\
+		-o ./data/test1.dat
+
 # ===== clean =====
 clean:
 	rm -rf bin/*

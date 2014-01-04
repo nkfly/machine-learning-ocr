@@ -9,6 +9,7 @@ import ml.humaning.algorithm.aggregation.LinearSVMAggregation;
 
 import ml.humaning.preprocessor.Resampler;
 import ml.humaning.preprocessor.DownSampler;
+import ml.humaning.preprocessor.TestAnsMerger;
 
 import ml.humaning.util.Logger;
 
@@ -24,6 +25,7 @@ public class RunnerFactory {
 		// preprecessors
 		if ("resample".equals(name)) return new Resampler();
 		if ("downsample".equals(name)) return new DownSampler();
+		if ("merge-test".equals(name)) return new TestAnsMerger();
 
 		// aggregation
 		if ("uniform".equals(name)) return new Uniform();
