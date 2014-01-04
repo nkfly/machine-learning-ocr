@@ -16,6 +16,10 @@ public class AdaBoost extends Algorithm {
 
 	AdaBoostM1 boost;
 
+	public String getName() {
+		return "adaboost";
+	}
+
 	public void train(Instances data) throws Exception {
 		Logger.log("Start AdaBoost train...");
 

@@ -34,37 +34,34 @@ run:
 		-te $(TEST_FILE)\
 		-o $(OUTPUT)
 
+# ===== Algorithms =====
 runSVM:
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a svm\
 		-tr $(TRAIN_FILE)\
-		-te $(TEST_FILE)\
-		-o $(OUTPUT)
+		-te $(TEST_FILE)
 
 runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
-		-m cv\
 		-k 10\
 		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)\
-		-o $(KNN_OUTPUT)
+		-te $(RESAMPLED_FILE)
 
 runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a linear-svm\
 		-s 7\
 		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)\
-		-o $(LINEARSVM_OUTPUT)
+		-te $(RESAMPLED_FILE)
 
 runAdaBoost: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a adaboost\
 		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)\
-		-o $(OUTPUT)
+		-te $(RESAMPLED_FILE)
 
+# ===== Aggregation =====
 runUniform: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a uniform-aggregation\
@@ -72,6 +69,7 @@ runUniform: build
 		-te $(RESAMPLED_FILE)\
 		-o $(OUTPUT)
 
+# ===== preprocessing =====
 resample: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a resample\
@@ -100,5 +98,6 @@ fill: build
 		-i $(TRAIN_FILE)\
 		-o $(FILLED_FILE)
 
+# ===== clean =====
 clean:
 	rm -rf bin/*

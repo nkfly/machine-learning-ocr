@@ -19,7 +19,6 @@ import ml.humaning.util.Logger;
 public class LinearSVM extends Algorithm {
 
 	private LibLINEAR libLinear;
-	private String modelPath = "./data/linear_svm.model";
 
 	private int s;
 
@@ -44,8 +43,14 @@ public class LinearSVM extends Algorithm {
 		return true;
 	}
 
+	// ----- naming -----
+	public String getName() {
+		return "linear_svm";
+	}
+
 	// ----- load/save model -----
 	public void loadModel() throws Exception {
+		String modelPath = getModelPath();
 		Logger.log("LinearSVM: Loading model from " + modelPath + "...");
 
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelPath));
@@ -56,6 +61,7 @@ public class LinearSVM extends Algorithm {
 	}
 
 	public void saveModel() throws Exception {
+		String modelPath = getModelPath();
 		Logger.log("LinearSVM: Saving model to " + modelPath + "...");
 
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelPath));

@@ -14,6 +14,10 @@ public class UniformAggregation extends Algorithm {
 
 	private ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
 
+	public String getName() {
+		return "uniform_aggregation";
+	}
+
 	public void saveModel() throws Exception {
 		// do nothing
 	}

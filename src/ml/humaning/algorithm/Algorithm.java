@@ -18,7 +18,6 @@ import ml.humaning.util.Logger;
 import ml.humaning.validation.Validator;
 
 public abstract class Algorithm implements Runner {
-
 	Instances trainData;
 	Instances testData;
 	String outputPath;
@@ -57,23 +56,27 @@ public abstract class Algorithm implements Runner {
 
 		if ("normal".equals(this.runMode)) {
 			if (!line.hasOption("train-file") ||
-					!line.hasOption("test-file") ||
-					!line.hasOption("output")) {
+					!line.hasOption("test-file")) {
 				return false;
 			}
 
 			this.trainData = Reader.readData(line.getOptionValue("train-file"));
 			this.testData = Reader.readData(line.getOptionValue("test-file"));
-			this.outputPath = line.getOptionValue("output");
+
+			if (line.hasOption("output")) {
+				this.outputPath = line.getOptionValue("output");
+			}
 
 		} else if ("lm".equals(this.runMode)) {
-			if (!line.hasOption("test-file") ||
-					!line.hasOption("output")) {
+			if (!line.hasOption("test-file")) {
 				return false;
 			}
 
 			this.testData = Reader.readData(line.getOptionValue("test-file"));
-			this.outputPath = line.getOptionValue("output");
+
+			if (line.hasOption("output")) {
+				this.outputPath = line.getOptionValue("output");
+			}
 
 		} else if ("cv".equals(this.runMode)) {
 			if (!line.hasOption("train-file")) {
@@ -83,7 +86,19 @@ public abstract class Algorithm implements Runner {
 			this.trainData = Reader.readData(line.getOptionValue("train-file"));
 		}
 
+		if (this.outputPath == null) this.outputPath = this.getOutputPath();
+
 		return true;
+	}
+
+	public abstract String getName();
+
+	public String getOutputPath() {
+		return "./data/" + this.getName() + "_output.dat";
+	}
+
+	public String getModelPath() {
+		return "./data/" + this.getName() + ".model";
 	}
 
 	public void loadModel() throws Exception {

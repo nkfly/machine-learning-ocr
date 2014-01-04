@@ -23,7 +23,6 @@ import ml.humaning.util.Reader;
 public class KNN extends Algorithm {
 
 	private int k;
-	private String modelPath = "./data/knn.model";
 	private String modelDataPath = "./data/knn_model.dat";
 
 	// ----- Getter and Setter -----
@@ -52,8 +51,14 @@ public class KNN extends Algorithm {
 		return true;
 	}
 
+	// ----- naming -----
+	public String getName() {
+		return "knn";
+	}
+
 	// ----- load/save model -----
 	public void loadModel() throws Exception {
+		String modelPath = getModelPath();
 		Logger.log("KNN: Loading model from " + modelPath + "...");
 
 		this.trainData = Reader.readData(modelDataPath);
@@ -66,6 +71,7 @@ public class KNN extends Algorithm {
 	}
 
 	public void saveModel() throws Exception {
+		String modelPath = getModelPath();
 		Logger.log("KNN: Saving model to " + modelPath + "...");
 
 		Writer.writeData(trainData, modelDataPath);
