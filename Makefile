@@ -9,14 +9,18 @@ CLASSPATH := $(CLASSPATH):libs/liblinear-1.92.jar
 ALGORITHM = ann
 
 # files
-TRAIN_FILE = ./data/train.dat
+# TRAIN_FILE = ./data/train_cropped.dat
+TRAIN_FILE = ./data/trainWith1_cropped.dat
 RESAMPLED_FILE = ./data/resampled.dat
 DOWNSAMPLED_FILE = ./data/downsampled.dat
 DOWNSAMPLED_26x30_FILE = ./data/downsampled_26x30.dat
 CROP_DOWNSAMPLE_35x35_FILE = ./data/crop_downsample_35x35.dat
+CROP_DOWNSAMPLE_21x21_FILE = ./data/crop_downsample_21x21.dat
 CROP_DOWNSAMPLE_15x15_FILE = ./data/crop_downsample_15x15.dat
+CROP_DOWNSAMPLE_15x15_TEST_FILE = ./data/crop_downsample_test_15x15.dat
+CROP_DOWNSAMPLE_15x15_ZEROONE_FILE = ./data/crop_downsample_zeroone_15x15.dat
 FILLED_FILE = ./data/filled.dat
-TEST_FILE = ./data/ml2013final_test1.nolabel.dat
+TEST_FILE = ./data/test2_cropped.dat
 
 # output files
 OUTPUT = ./data/output.dat
@@ -45,10 +49,9 @@ runSVM:
 runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
-		-m cv\
-		-k 2\
+		-k 13\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
-		-te $(RESAMPLED_FILE)
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
@@ -101,8 +104,8 @@ resample: build
 downsample: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a downsample\
-		-i $(TRAIN_FILE)\
-		-o $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-i $(TEST_FILE)\
+		-o $(CROP_DOWNSAMPLE_15x15_TEST_FILE)\
 		-s 7
 
 downsample_custom: build
