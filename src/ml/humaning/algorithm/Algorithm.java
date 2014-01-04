@@ -102,6 +102,10 @@ public abstract class Algorithm implements Runner {
 		return "./data/" + this.getName() + ".model";
 	}
 
+	public String getCVResultPath(int nFold, int fold) {
+		return "./data/" + this.getName() + "_cv_" + nFold + "_" + fold + "_output.dat";
+	}
+
 	public void loadModel() throws Exception {
 		throw new Exception("Not implemented yet");
 	}
@@ -123,8 +127,12 @@ public abstract class Algorithm implements Runner {
 	}
 
 	private void writeResult(ArrayList<Integer> results) throws Exception {
+		writeResult(results, this.outputPath);
+	}
+
+	private void writeResult(ArrayList<Integer> results, String outputPath) throws Exception {
 		Logger.log("Write output to " + outputPath + "...");
-		PrintWriter writer = new PrintWriter(this.outputPath, "UTF-8");
+		PrintWriter writer = new PrintWriter(outputPath, "UTF-8");
 
 		for (Integer value : results) {
 			writer.println("" + (value + 1));
@@ -180,6 +188,8 @@ public abstract class Algorithm implements Runner {
 			ArrayList<Integer> results = this.predict(testCV);
 			double error = Validator.getError(testCV, results);
 			Logger.log("error = " + error);
+
+			writeResult(results, getCVResultPath(N, i));
 
 			average += error;
 		}
