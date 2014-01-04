@@ -4,7 +4,7 @@ import ml.humaning.algorithm.Algorithm;
 import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.LinearSVM;
 import ml.humaning.algorithm.AdaBoost;
-import ml.humaning.algorithm.UniformAggregation;
+import ml.humaning.algorithm.aggregation.Uniform;
 
 import ml.humaning.preprocessor.Resampler;
 import ml.humaning.preprocessor.DownSampler;
@@ -13,7 +13,7 @@ import ml.humaning.util.Logger;
 
 public class RunnerFactory {
 
-	public static Runner create(String name) {
+	public static Runner create(String name) throws Exception {
 
 		// algorithms
 		if ("knn".equals(name)) return new KNN();
@@ -25,7 +25,8 @@ public class RunnerFactory {
 		if ("downsample".equals(name)) return new DownSampler();
 
 		// aggregation
-		if ("uniform-aggregation".equals(name)) return new UniformAggregation();
+		if ("uniform".equals(name)) return new Uniform();
+		/* if ("aggregation".equals(name)) return new Aggregation(); */
 
 		Logger.log("no runner match for " + name);
 
