@@ -9,7 +9,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
 import ml.humaning.algorithm.ANN;
-import ml.humaning.algorithm.NB;
+import ml.humaning.algorithm.LR;
+import ml.humaning.algorithm.Perceptron;
 import ml.humaning.algorithm.SMO;
 import ml.humaning.algorithm.SVM;
 import ml.humaning.algorithm.KNN;
@@ -29,19 +30,36 @@ public class ZodiacCharacterRecognizer {
 
 
 		try {
+//			SVD svd = new SVD(15*15, argv[0]);
+//			svd.decompose(225, argv[1]);
+//			ANN ann = new ANN();
+//			ann.train(argv[0]);
+//			Perceptron p = new Perceptron();
+//			p.train(argv[0]);
+//			p.predict(argv[2], "result.out");
 			
-			ImageFeatureExtractor.featureExtract(argv[0], argv[1]);
-			System.out.println("train finished");
-			ImageFeatureExtractor.featureExtract(argv[2], argv[3]);
-			System.out.println("test finished");
-			//KNN knn = new KNN(argv[1]);
-			//System.out.println(knn.getCVError(6, 5));
-			SVM svm = new SVM(argv[1]);
-			svm.train(0, 1, 3, 0.0001, -1, 100, -1, -1);
-			System.out.println("svm train finished");
-			svm.predict(0, 1, argv[3], "result.out");
-			//knn.predict(1, argv[3], "result.out");
+			//ImageFeatureExtractor.doCrop(argv[0]);
+			ImageFeatureExtractor ii = new ImageFeatureExtractor(argv[0]);
+			ii.saveAllPoints();
+//			LR l = new LR();
+//			l.train(argv[0]);
+//			l.predict(argv[2], "result.out");
+			
+			
+			
+//			ImageFeatureExtractor.featureExtract(argv[0], argv[1]);
+//			System.out.println("train finished");
+//			ImageFeatureExtractor.featureExtract(argv[2], argv[3]);
+//			System.out.println("test finished");
+//			KNN knn = new KNN("pca.dat");
+//			System.out.println(knn.getCVError(6, 5));
+//			SVM svm = new SVM(argv[1]);
+//			svm.train(0, 1, 3, 0.0001, -1, 100, -1, -1);
+//			System.out.println("svm train finished");
+//			svm.predict(0, 1, argv[3], "result.out");
+//			knn.predict(3, argv[3], "result.out");
 			System.out.println(Reader.getTestAccuracy("ans1.dat", "result.out"));
+			
 
 
 			CommandLine line = parser.parse(options, argv);
@@ -145,7 +163,7 @@ public class ZodiacCharacterRecognizer {
 			return;
 		}
 		// argv[0] : -knn, argv[1] : trainFile , argv[2] : testFile , argv[3] outputFile
-		NB nb = new NB();
+		Perceptron nb = new Perceptron();
 		String testFilePath = line.getOptionValue("test-file");
 		String outputFilePath = line.getOptionValue("output");
 		nb.train(line.getOptionValue("train-file"));

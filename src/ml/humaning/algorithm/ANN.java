@@ -28,26 +28,26 @@ public class ANN {
         filter.setInputFormat(data);
         data = Filter.useFilter(data, filter);
 		
-		//System.out.println("1");
+		System.out.println("1");
 		
-//		PrincipalComponents pca = new PrincipalComponents();
-//		pca.setMaximumAttributeNames(300);
-//		pca.buildEvaluator(data);
-//		data = pca.transformedData(data);
+		PrincipalComponents pca = new PrincipalComponents();
+		pca.setMaximumAttributeNames(25);
+		pca.buildEvaluator(data);
+		data = pca.transformedData(data);
 		
-		//System.out.println("after pca");
-//		
-//		LibSVMSaver libsvmSaver = new LibSVMSaver();
-//		libsvmSaver.setInstances(data);
-//		libsvmSaver.setFile(new File("pca.dat"));
-//		libsvmSaver.writeBatch();
+		System.out.println("after pca");
+		
+		LibSVMSaver libsvmSaver = new LibSVMSaver();
+		libsvmSaver.setInstances(data);
+		libsvmSaver.setFile(new File("pca.dat"));
+		libsvmSaver.writeBatch();
 
-		multilayerPerceptron = new MultilayerPerceptron();
-		multilayerPerceptron.setTrainingTime(1000);
-		multilayerPerceptron.buildClassifier(data);
-		
-		System.out.println("after ann");
-		
+//		multilayerPerceptron = new MultilayerPerceptron();
+//		multilayerPerceptron.setTrainingTime(1000);
+//		multilayerPerceptron.buildClassifier(data);
+//		
+//		System.out.println("after ann");
+//		
 		
 
 	}

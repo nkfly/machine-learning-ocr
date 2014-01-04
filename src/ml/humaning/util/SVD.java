@@ -33,7 +33,7 @@ public class SVD {
 	    double minImprovement = 0.0000;
 	    int minEpochs = 10;
 	    int maxEpochs = 50000;
-
+	    System.out.println("before svd");
 	    SvdMatrix svdMatrix = SvdMatrix.svd(matrix,
 	                        reduceDimension,
 	                        featureInit,
@@ -44,6 +44,7 @@ public class SVD {
 	                        minImprovement,
 	                        minEpochs,
 	                        maxEpochs);
+	    System.out.println("after svd");
 	    //double[][] termVectors = svdMatrix.leftSingularVectors();
 	    double[][] instanceVectors = svdMatrix.rightSingularVectors();
 	    BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));

@@ -21,18 +21,35 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import de.lmu.ifi.dbs.jfeaturelib.LibProperties;
 import de.lmu.ifi.dbs.jfeaturelib.edgeDetector.Canny;
 import de.lmu.ifi.dbs.jfeaturelib.features.CEDD;
 import de.lmu.ifi.dbs.jfeaturelib.features.FCTH;
+import de.lmu.ifi.dbs.jfeaturelib.features.FuzzyHistogram;
 import de.lmu.ifi.dbs.jfeaturelib.features.Gabor;
 import de.lmu.ifi.dbs.jfeaturelib.features.Haralick;
+import de.lmu.ifi.dbs.jfeaturelib.features.Histogram;
+import de.lmu.ifi.dbs.jfeaturelib.features.JpegCoefficientHistogram;
 import de.lmu.ifi.dbs.jfeaturelib.features.LocalBinaryPatterns;
+import de.lmu.ifi.dbs.jfeaturelib.features.LuminanceLayout;
 import de.lmu.ifi.dbs.jfeaturelib.features.MPEG7EdgeHistogram;
+import de.lmu.ifi.dbs.jfeaturelib.features.MeanIntensityLocalBinaryPatterns;
+import de.lmu.ifi.dbs.jfeaturelib.features.MeanPatchIntensityHistogram;
+import de.lmu.ifi.dbs.jfeaturelib.features.Moments;
+import de.lmu.ifi.dbs.jfeaturelib.features.OpponentHistogram;
 import de.lmu.ifi.dbs.jfeaturelib.features.PHOG;
+import de.lmu.ifi.dbs.jfeaturelib.features.ReferenceColorSimilarity;
+import de.lmu.ifi.dbs.jfeaturelib.features.SURF;
 import de.lmu.ifi.dbs.jfeaturelib.features.Sift;
 import de.lmu.ifi.dbs.jfeaturelib.features.Tamura;
+import de.lmu.ifi.dbs.jfeaturelib.features.Thumbnail;
 import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.AdaptiveGridResolution;
+import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.CentroidFeature;
+import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.Eccentricity;
+import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.ExtremalPoints;
 import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.PolygonEvolution;
+import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.Profiles;
+import de.lmu.ifi.dbs.jfeaturelib.shapeFeatures.SquareModelShapeMatrix;
 import de.lmu.ifi.dbs.utilities.Arrays2;
 
 public class ImageFeatureExtractor {
@@ -51,7 +68,7 @@ public class ImageFeatureExtractor {
 		FloatProcessor fp = new FloatProcessor(allData[index].getFloatArray());
 		fp.invert();
 		ImagePlus imp = new ImagePlus("test.tif", fp);
-		IJ.saveAs(imp, "tif", "image.tif");
+		IJ.saveAs(imp, "tif", name);
 		
 	}
 	public void analyze(int index){
@@ -65,6 +82,17 @@ public class ImageFeatureExtractor {
 			analyzer.displayResults();
 		}
 
+	}
+	
+	public static void doCrop(String trainFile) throws IOException{
+		Point [] allData = Reader.readPoints(trainFile);
+		FloatProcessor fp = new FloatProcessor(allData[0].getFloatArray());
+		fp.invert();
+		//fp = (FloatProcessor) fp.crop();
+		fp.scale(0.2, 0.2);
+		ImagePlus imp = new ImagePlus("test.tif", fp);
+		IJ.saveAs(imp, "tif", "image.tif");
+		
 	}
 	public static void addFeature(int maxDimension, String inputFile, String outputFile) throws IOException{
 		BufferedReader br = new BufferedReader(new FileReader(inputFile));
@@ -117,8 +145,19 @@ public class ImageFeatureExtractor {
 			
 			//File f = new File("image"+i+".jpg");
 	        //ColorProcessor image = new FloatProcessor(ImageIO.read(f));
-	        
-			Tamura descriptor = new Tamura() ;
+	        //System.out.println(fp.getMask());
+	        //fp.setMask(new ImageProcessor());
+//			LibProperties prop = LibProperties.get();
+//		    prop.setProperty(LibProperties.HISTOGRAMS_BINS, 225);
+//		    prop.setProperty(LibProperties.HISTOGRAMS_TYPE, "Gray");
+		        // after v 1.0.1 you will be able to use this:
+		        // prop.setProperty(LibProperties.HISTOGRAMS_TYPE, Histogram.TYPE.Red.name());
+
+		        // initialize the descriptor, set the properties and run it
+			AdaptiveGridResolution descriptor = new AdaptiveGridResolution(50);
+		    //descriptor.setProperties(prop);
+			//Histogram descriptor = new Histogram() ;
+			//descritor.setProperties(LibProperties properties);
 	        //descriptor.setNeighborhoodSize(8);
 	        //descriptor.setNumberOfHistogramBins(3);
 

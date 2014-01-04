@@ -9,8 +9,8 @@ public class Point implements Comparable <Point>{
 	private Dimension [] dimensionArray;
 	private double distanceToReference = 0.0;
 	private int maskRegion = 0; // 0 means no blending , 1, 2, 3, 4 represents the empty area
-	public static final int width = 15;
-	public static final int height = 15;
+	public static final int width = 105;
+	public static final int height = 122;
 	
 	public int getMaxDimension(){
 		return dimensionArray[dimensionArray.length-1].getDimension();
