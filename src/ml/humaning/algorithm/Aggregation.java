@@ -19,6 +19,25 @@ public abstract class Aggregation extends Algorithm {
 		algorithms.add(algo);
 	}
 
+	protected void rawDataToInstances(ArrayList<ArrayList<Integer>> raw, Instances data) {
+		int nData = raw.get(0).size();
+		int nAlgo = algorithms.size();
+
+		for (int i = 0; i < nData; i++) {
+			SparseInstance inst = new SparseInstance(nAlgo + 1);
+
+			for (int j = 0; j < nAlgo; j++) {
+				inst.setValue(j, (double)raw.get(j).get(i));
+			}
+
+			inst.setDataset(data);
+
+			inst.setClassValue(raw.get(nAlgo).get(i));
+
+			data.add(inst);
+		}
+	}
+
 	protected void loadCVFoldData(Instances data, int nFold, int currentFold) throws Exception {
 		int nAlgo = algorithms.size();
 
@@ -36,23 +55,14 @@ public abstract class Aggregation extends Algorithm {
 		}
 
 		Instances originTestCVData = super.loadCVTestData(nFold, currentFold);
+		ArrayList<Integer> classes = new ArrayList<Integer>();
+		for (Instance inst : originTestCVData) {
+			classes.add((int)inst.classValue());
+		}
+		raw.add(classes);
 
 		// insert inst
-		int nData = originTestCVData.numInstances();
-		for (int i = 0; i < nData; i++) {
-			Instance originInst = originTestCVData.instance(i);
-			SparseInstance inst = new SparseInstance(nAlgo + 1);
-
-			for (int j = 0; j < nAlgo; j++) {
-				inst.setValue(j, (double)raw.get(j).get(i));
-			}
-
-			inst.setDataset(data);
-			inst.setClassValue(originInst.classValue());
-
-			data.add(inst);
-		}
-
+		rawDataToInstances(raw, data);
 	}
 
 	protected Instances loadCVTrainData(int nFold, int fold) throws Exception {
@@ -80,5 +90,36 @@ public abstract class Aggregation extends Algorithm {
 		}
 
 		this.train(trainCV);
+	}
+
+	protected ArrayList<Integer> predictCV(int nFold, int fold) throws Exception {
+		this.testCV = loadCVTestData(nFold, fold);
+
+		int nAlgo = algorithms.size();
+
+		// construct raw array
+		ArrayList<ArrayList<Integer>> raw = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < nAlgo + 1; i++) {
+			raw.add(new ArrayList<Integer>());
+		}
+
+		// predict by all algorithm
+		for (Instance inst : testCV) {
+			for (int featureIndex = 0; featureIndex < nAlgo ; featureIndex++) {
+				Algorithm algo = algorithms.get(featureIndex);
+				int result = algo.predict(inst);
+				raw.get(featureIndex).add(result);
+			}
+
+			raw.get(nAlgo).add((int)inst.classValue());
+		}
+
+		// generate data
+		Instances data =
+			InstancesHelper.genInstancesWithNumAttribute("feature", nAlgo, trainData);
+
+		rawDataToInstances(raw, data);
+
+		return this.predict(data);
 	}
 }

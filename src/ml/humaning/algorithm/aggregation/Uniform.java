@@ -41,12 +41,8 @@ public class Uniform extends Aggregation {
 		double current, max = -1;
 		int currentIndex, maxIndex = -1;
 
-		Logger.log("========");
 		for (Algorithm algo : algorithms) {
 			currentIndex = algo.predict(inst);
-
-			Logger.log("algo = " + algo);
-			Logger.log("currentIndex = " + currentIndex);
 
 			current = ++result[currentIndex];
 			if (current > max) {
@@ -55,7 +51,7 @@ public class Uniform extends Aggregation {
 			}
 		}
 		Logger.log("result = " + Arrays.toString(result));
-		Logger.log("max = " + max);
+		Logger.log("uniform predict = " + maxIndex);
 
 		return maxIndex;
 	}

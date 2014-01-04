@@ -5,6 +5,7 @@ import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.LinearSVM;
 import ml.humaning.algorithm.AdaBoost;
 import ml.humaning.algorithm.aggregation.Uniform;
+import ml.humaning.algorithm.aggregation.LinearSVMAggregation;
 
 import ml.humaning.preprocessor.Resampler;
 import ml.humaning.preprocessor.DownSampler;
@@ -26,7 +27,7 @@ public class RunnerFactory {
 
 		// aggregation
 		if ("uniform".equals(name)) return new Uniform();
-		/* if ("aggregation".equals(name)) return new Aggregation(); */
+		if ("linear-svm-aggregation".equals(name)) return new LinearSVMAggregation();
 
 		Logger.log("no runner match for " + name);
 

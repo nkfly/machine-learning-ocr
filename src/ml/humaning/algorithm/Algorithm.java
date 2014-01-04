@@ -20,10 +20,11 @@ import ml.humaning.validation.Validator;
 public abstract class Algorithm implements Runner {
 	Instances trainData;
 	Instances testData;
+	Instances testCV;
 	String outputPath;
 	String runMode = "normal";
-	Options options;
-	CommandLine line;
+	public Options options;
+	public CommandLine line;
 
 	public void registerOptions() {
 		if (options == null) options = new Options();
@@ -195,6 +196,12 @@ public abstract class Algorithm implements Runner {
 		this.train(trainCV);
 	}
 
+	protected ArrayList<Integer> predictCV(int nFold, int fold) throws Exception {
+		this.testCV = loadCVTestData(nFold, fold);
+
+		return this.predict(testCV);
+	}
+
 	public void runCrossValidation() throws Exception {
 		this.trainData = Reader.readData(line.getOptionValue("train-file"));
 
@@ -207,11 +214,10 @@ public abstract class Algorithm implements Runner {
 			this.trainCV(N, i);
 
 			// predict
-			Instances testCV = loadCVTestData(N, i);
-			ArrayList<Integer> results = this.predict(testCV);
+			ArrayList<Integer> results = this.predictCV(N, i);
 
 			// validate
-			double error = Validator.getError(testCV, results);
+			double error = Validator.getError(this.testCV, results);
 			Logger.log("error = " + error);
 
 			// record
