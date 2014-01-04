@@ -24,14 +24,20 @@ public class CropAverageDownsampler {
 			int _bottom = 0;
 			
 			for(Dimension d : originalData[i].getDimensionArray()){
-				if(d.getValue() > _gradient &&  d.getDimension() % 105 < _left):
-	                _left = elem[0] % 105
-	            if(elem[1] > _gradient and elem[0] % 105 > _right):
-	                _right = elem[0] % 105
-	            if(elem[1] > _gradient and elem[0] / 105 < _top):
-	                _top = elem[0] / 105
-	            if(elem[1] > _gradient and elem[0] / 105 > _bottom):
-	                _bottom = elem[0] / 105
+				if(d.getValue() > _gradient &&  d.getDimension() % 105 < _left){
+					_left = d.getDimension() % 105;
+				}
+				if(d.getValue() > _gradient && d.getDimension() % 105 > _right){
+					_right = d.getDimension() % 105
+				}
+	            if(d.getValue() > _gradient && d.getDimension() / 105 < _top){
+	            	_top = d.getDimension() / 105;
+	            }
+	            if(d.getValue() > _gradient && d.getDimension() / 105 > _bottom){
+	            	_bottom = d.getDimension() / 105;
+	            }
+	                
+	                
 			}
 			
 		} 
