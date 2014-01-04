@@ -9,8 +9,8 @@ import ml.humaning.util.Logger;
 
 public class Point {
 
-	public static final int IMAGE_WIDTH = 105;
-	public static final int IMAGE_HEIGHT = 122;
+	public static final int IMAGE_WIDTH = 15;
+	public static final int IMAGE_HEIGHT = 15;
 
 	/* private int zodiac; */
 	/* private Dimension [] dimensionArray; */

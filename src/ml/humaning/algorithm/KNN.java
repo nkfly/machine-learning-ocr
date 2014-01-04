@@ -24,6 +24,7 @@ public class KNN extends Algorithm {
 
 	private int k;
 	private String modelDataPath = "./data/knn_model.dat";
+	private Instances currentTrainData;
 
 	// ----- Getter and Setter -----
 	public void setK(int k) {
@@ -85,6 +86,7 @@ public class KNN extends Algorithm {
 	// ----- Train -----
 	public void train(Instances data) {
 		// yup, there is no trainning process in KNN
+		this.currentTrainData = data;
 	}
 
 	// ----- Predict -----
@@ -117,7 +119,7 @@ public class KNN extends Algorithm {
 	public int predict(Instance inst) {
 		int result = 0;
 
-		ArrayList<Point> array = InstancesHelper.toPointArray(trainData);
+		ArrayList<Point> array = InstancesHelper.toPointArray(currentTrainData);
 		Collections.sort(array, new CosineDistanceComparator(new Point(inst)));
 
 		Point targetPoint = new Point(inst);
