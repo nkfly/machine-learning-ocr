@@ -71,6 +71,13 @@ runNaiveBayes: build
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
+runRandomForest: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a random-forest\
+		-m cv\
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
+
 runAdaBoost: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a adaboost\

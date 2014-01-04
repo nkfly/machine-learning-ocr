@@ -6,6 +6,7 @@ import ml.humaning.algorithm.LinearSVM;
 import ml.humaning.algorithm.PolySVM;
 import ml.humaning.algorithm.NBayes;
 import ml.humaning.algorithm.AdaBoost;
+import ml.humaning.algorithm.RForest;
 import ml.humaning.algorithm.aggregation.Uniform;
 import ml.humaning.algorithm.aggregation.LinearSVMAggregation;
 
@@ -24,6 +25,7 @@ public class RunnerFactory {
 		if ("linear-svm".equals(name)) return new LinearSVM();
 		if ("poly-svm".equals(name)) return new PolySVM();
 		if ("naive-bayes".equals(name)) return new NBayes();
+		if ("random-forest".equals(name)) return new RForest();
 		if ("adaboost".equals(name)) return new AdaBoost(); // this one not work
 
 		// preprecessors

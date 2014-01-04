@@ -12,6 +12,7 @@ import ml.humaning.algorithm.Algorithm;
 import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.PolySVM;
 import ml.humaning.algorithm.NBayes;
+import ml.humaning.algorithm.RForest;
 
 import ml.humaning.util.Logger;
 
@@ -23,6 +24,7 @@ public class Uniform extends Aggregation {
 
 		addAlgorithm(knn); // 83%
 		addAlgorithm(new PolySVM()); // 71%
+		addAlgorithm(new RForest()); // 63%
 		addAlgorithm(new NBayes()); // 58%
 	}
 
