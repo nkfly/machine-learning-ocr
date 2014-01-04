@@ -131,13 +131,13 @@ public class KNN extends Algorithm {
 		double max = 0;
 		int result = -1;
 
-		for (int i = 1; i <= k; i++) {
+		for (int i = 0; i < k; i++) {
 			Point point = array.get(i);
 			int zodiac = point.getZodiac();
 			counter[zodiac] += targetPoint.cosineSimilarity(point);
 		}
 
-		for (int i = 1; i <= 12; i++) {
+		for (int i = 0; i < 12; i++) {
 			double vote = counter[i];
 			if (vote > max) {
 				max = vote;

@@ -15,6 +15,7 @@ import weka.core.Instances;
 import ml.humaning.Runner;
 import ml.humaning.util.Reader;
 import ml.humaning.util.Logger;
+import ml.humaning.validation.Validator;
 
 public abstract class Algorithm implements Runner {
 
@@ -133,7 +134,24 @@ public abstract class Algorithm implements Runner {
 	}
 
 	public void runCrossValidation() throws Exception {
+		int N = 5;
+		int i;
+		double average = 0.0;
 
+		for (i = 0; i < N; i++) {
+			Instances trainCV = trainData.trainCV(N, i);
+			Instances testCV = trainData.testCV(N, i);
+
+			this.train(trainCV);
+			ArrayList<Integer> results = this.predict(testCV);
+			double error = Validator.getError(testCV, results);
+			Logger.log("error = " + error);
+
+			average += error;
+		}
+		average /= N;
+		Logger.log("Cross Validation Error = " + average);
+		Logger.log("Cross Validation Accuracy = " + (1.0 - average));
 	}
 
 	public void run() throws Exception {
