@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="libs/libsvm.jar"/>
 	<classpathentry kind="lib" path="libs/lingpipe-4.1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/liblinear-1.92.jar"/>
+	<classpathentry kind="lib" path="libs/LibLINEAR.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
