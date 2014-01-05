@@ -163,10 +163,14 @@ public abstract class Algorithm implements Runner {
 		Logger.log("DONE");
 	}
 
+	public void beforeTrain() throws Exception {
+	}
+
 	public void runPredictWithTrainData() throws Exception {
 		this.trainData = Reader.readData(line.getOptionValue("train-file"));
 		this.testData = Reader.readData(line.getOptionValue("test-file"));
 
+		this.beforeTrain();
 		this.train(trainData);
 		ArrayList<Integer> results = this.predict(testData);
 

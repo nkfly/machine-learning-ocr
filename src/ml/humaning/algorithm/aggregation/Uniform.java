@@ -11,15 +11,17 @@ import ml.humaning.algorithm.Aggregation;
 import ml.humaning.algorithm.Algorithm;
 import ml.humaning.algorithm.KNN;
 import ml.humaning.algorithm.PolySVM;
+import ml.humaning.algorithm.LinearSVM;
 import ml.humaning.algorithm.NBayes;
 import ml.humaning.algorithm.RForest;
 import ml.humaning.algorithm.AdaBoost;
+import ml.humaning.algorithm.JFourtyEight;
 
 import ml.humaning.util.Logger;
 
 public class Uniform extends Aggregation {
 
-	private int [] weights = new int[]{5, 3, 2, 2, 1};
+	private int [] weights = new int[]{7, 2, 2, 2, 1, 1, 1};
 
 	public Uniform() throws Exception {
 		KNN knn = new KNN();
@@ -27,9 +29,11 @@ public class Uniform extends Aggregation {
 
 		addAlgorithm(knn); // 83%
 		addAlgorithm(new PolySVM()); // 71%
-		addAlgorithm(new AdaBoost()); // 64%
-		addAlgorithm(new RForest()); // 63%
+		addAlgorithm(new LinearSVM()); // 67%
+		addAlgorithm(new AdaBoost()); // 66.8%
+		addAlgorithm(new RForest()); // 65%
 		addAlgorithm(new NBayes()); // 58%
+		addAlgorithm(new JFourtyEight()); // 48%
 	}
 
 	public String getName() {
@@ -42,6 +46,12 @@ public class Uniform extends Aggregation {
 
 	public void saveModel(String path) throws Exception {
 		// do nothing
+	}
+
+	public void beforeTrain() throws Exception {
+		for (Algorithm algo : algorithms) {
+			algo.loadModel();
+		}
 	}
 
 	public void train(Instances data) throws Exception {

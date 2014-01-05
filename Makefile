@@ -45,7 +45,6 @@ run:
 runKNN: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a knn\
-		-m cv\
 		-k 13\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
@@ -53,29 +52,24 @@ runKNN: build
 runLinearSVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a linear-svm\
-		-m lm\
-		-s 7\
-		-tr $(RESAMPLED_FILE)\
-		-te $(RESAMPLED_FILE)
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runPolySVM: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a poly-svm\
-		-m cv\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runNaiveBayes: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a naive-bayes\
-		-m cv\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
 runRandomForest: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a random-forest\
-		-m cv\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 
@@ -90,6 +84,12 @@ runAdaBoost: build
 	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
 		-a adaboost\
 		-m cv\
+		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
+		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
+
+runJ48: build
+	java -cp $(CLASSPATH) ml.humaning.ZodiacCharacterRecognizer\
+		-a j48\
 		-tr $(CROP_DOWNSAMPLE_15x15_FILE)\
 		-te $(CROP_DOWNSAMPLE_15x15_TEST_FILE)
 

@@ -42,7 +42,7 @@ public class RForest extends Algorithm {
 		options[0]  = "-I";
 		options[1]  = "10";
 		options[2]  = "-K";
-		options[3]  = "30";
+		options[3]  = "50";
 		options[4]  = "-S";
 		options[5]  = "1";
 		options[6]  = "-num-slots";

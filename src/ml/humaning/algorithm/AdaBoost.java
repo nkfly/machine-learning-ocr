@@ -47,7 +47,7 @@ public class AdaBoost extends Algorithm {
 		options[0] = "-S";
 		options[1] = "1";
 		options[2] = "-C";
-		options[3] = "1.0";
+		options[3] = "0.01";
 		options[4] = "-E";
 		options[5] = "0.01";
 		options[6] = "-B";

@@ -7,6 +7,7 @@ import ml.humaning.algorithm.PolySVM;
 import ml.humaning.algorithm.NBayes;
 import ml.humaning.algorithm.AdaBoost;
 import ml.humaning.algorithm.RForest;
+import ml.humaning.algorithm.JFourtyEight;
 import ml.humaning.algorithm.Immu;
 import ml.humaning.algorithm.aggregation.Uniform;
 import ml.humaning.algorithm.aggregation.LinearSVMAggregation;
@@ -28,6 +29,7 @@ public class RunnerFactory {
 		if ("naive-bayes".equals(name)) return new NBayes();
 		if ("random-forest".equals(name)) return new RForest();
 		if ("adaboost".equals(name)) return new AdaBoost();
+		if ("j48".equals(name)) return new JFourtyEight();
 
 		if ("immunos1".equals(name)) return new Immu(); // this one not work
 
